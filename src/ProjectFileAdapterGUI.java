@@ -108,6 +108,12 @@ public class ProjectFileAdapterGUI extends Application
 
   private Button reqCreateButton;
 
+  private HBox selectedReqPane;
+  private Label selectedReqProjectIdLabel;
+  private Label selectedReqProjectIdOutput;
+  private Label selectedReqIdLabel;
+  private Label selectedReqIdOutput;
+
   // Tasks Tab
   private Tab taskTab;
   private VBox taskPane;
@@ -206,7 +212,8 @@ public class ProjectFileAdapterGUI extends Application
 
   private MyActionListener listener;
   private MyTabListener tabListener;
-  private MyListListener tableListener;
+  private MyProjectListListener projectListener;
+  private MyReqListListener reqListener;
 
   /**
    * @param window The Stage object that will be displayed
@@ -222,7 +229,8 @@ public class ProjectFileAdapterGUI extends Application
     employeeAdapter = new EmployeeFileAdapter(employeesFile);
     listener = new MyActionListener();
     tabListener = new MyTabListener();
-    tableListener = new MyListListener();
+    projectListener = new MyProjectListListener();
+    reqListener = new MyReqListListener();
 
     tabPane = new TabPane();
     tabPane.getSelectionModel().selectedItemProperty().addListener(tabListener);
@@ -259,7 +267,7 @@ public class ProjectFileAdapterGUI extends Application
     allProjectsTable.getColumns().add(projectTitleColumn);
     allProjectsTable.getColumns().add(projectDescriptionColumn);
     allProjectsTable.getSelectionModel().selectedItemProperty()
-        .addListener((tableListener));
+        .addListener(projectListener);
 
     projectTablePane = new FlowPane();
     projectTablePane.setAlignment(Pos.BASELINE_RIGHT);
@@ -343,6 +351,8 @@ public class ProjectFileAdapterGUI extends Application
     allReqsTable.getColumns().add(reqStatusColumn);
     allReqsTable.getColumns().add(reqDescriptionColumn);
     allReqsTable.getColumns().add(reqDeadlineColumn);
+    allReqsTable.getSelectionModel().selectedItemProperty()
+        .addListener(reqListener);
 
     reqTablePane = new FlowPane();
     reqTablePane.setAlignment(Pos.BASELINE_RIGHT);
@@ -383,6 +393,17 @@ public class ProjectFileAdapterGUI extends Application
     imagePane.setAlignment(Pos.BOTTOM_CENTER);
     imagePane.getChildren().add(logoView);
 */
+
+    selectedReqPane = new HBox(20);
+    selectedReqProjectIdLabel = new Label("Selected Project:");
+    selectedReqProjectIdOutput = new Label();
+    selectedReqIdLabel = new Label("Selected Requirement:");
+    selectedReqIdOutput = new Label();
+    selectedReqPane.getChildren()
+        .addAll(selectedReqProjectIdLabel, selectedReqProjectIdOutput,
+            selectedReqIdLabel, selectedReqIdOutput);
+
+    reqPane.getChildren().add(selectedReqPane);
     reqPane.getChildren().add(reqTopPane);
     reqPane.getChildren().add(reqCreateButton);
 
@@ -477,15 +498,18 @@ public class ProjectFileAdapterGUI extends Application
     allEmployeeTable.setPrefHeight(290);
 
     firstNameColumn = new TableColumn<Employee, String>("First name");
-    firstNameColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
+    firstNameColumn.setCellValueFactory(
+        new PropertyValueFactory<Employee, String>("firstName"));
     firstNameColumn.setPrefWidth(165);
 
     lastNameColumn = new TableColumn<Employee, String>("Last name");
-    lastNameColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
+    lastNameColumn.setCellValueFactory(
+        new PropertyValueFactory<Employee, String>("lastName"));
     lastNameColumn.setPrefWidth(165);
 
     roleColumn = new TableColumn<Employee, String>("Role");
-    roleColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
+    roleColumn.setCellValueFactory(
+        new PropertyValueFactory<Employee, String>("role"));
     roleColumn.setPrefWidth(165);
 
     allEmployeeTable.getColumns().add(firstNameColumn);
@@ -571,7 +595,6 @@ public class ProjectFileAdapterGUI extends Application
     window.setResizable(false);
     window.show();
   }
-
 
   /**
    * Updates the allProjectsTable with information from the projects file
@@ -675,7 +698,6 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-
   public void updateSelectedProject()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
@@ -683,6 +705,23 @@ public class ProjectFileAdapterGUI extends Application
       String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
           .getId();
       selectedProjectIdOutput.setText(projectId);
+    }
+  }
+
+  public void updateSelectedReq()
+  {
+    if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
+    {
+      String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
+          .getId();
+      selectedReqProjectIdOutput.setText(projectId);
+
+      if (allReqsTable.getSelectionModel().getSelectedItem() != null)
+      {
+        String reqId = allReqsTable.getSelectionModel().getSelectedItem()
+            .getId();
+        selectedReqIdOutput.setText(reqId);
+      }
     }
   }
 
@@ -838,6 +877,7 @@ public class ProjectFileAdapterGUI extends Application
         if (allReqsTable.getSelectionModel().getSelectedItem() != null)
         {
           updateReqTable();
+          updateSelectedReq();
         }
       }
       else if (newTab == taskTab)
@@ -855,7 +895,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  private class MyListListener implements ChangeListener<Project>
+  private class MyProjectListListener implements ChangeListener<Project>
   {
     public void changed(ObservableValue<? extends Project> project,
         Project oldProject, Project newProject)
@@ -872,7 +912,10 @@ public class ProjectFileAdapterGUI extends Application
          */
       }
     }
+  }
 
+  private class MyReqListListener implements ChangeListener<Requirement>
+  {
     public void changed(ObservableValue<? extends Requirement> requirement,
         Requirement oldRequirement, Requirement newRequirement)
     {
@@ -880,24 +923,28 @@ public class ProjectFileAdapterGUI extends Application
 
       if (temp != null)
       {
+        updateSelectedReq();
         reqIdField.setText(temp.getId());
         reqStatusField.setText(temp.getStatus());
         reqDescriptionField.setText(temp.getDescription());
       }
     }
+  }
+/*
+  public void changed(ObservableValue<? extends Task> task, Task oldTask,
+      Task newTask)
+  {
+    Task temp = allTasksTable.getSelectionModel().getSelectedItem();
 
-    public void changed(ObservableValue<? extends Task> task, Task oldTask,
-        Task newTask)
+    if (temp != null)
     {
-      Task temp = allTasksTable.getSelectionModel().getSelectedItem();
-
-      if (temp != null)
-      {
-        taskIdField.setText(temp.getId());
-        taskStatusField.setText(temp.getStatus());
-        taskDescriptionField.setPromptText(temp.getDescription());
-      }
+      taskIdField.setText(temp.getId());
+      taskStatusField.setText(temp.getStatus());
+      taskDescriptionField.setPromptText(temp.getDescription());
     }
   }
+
+
+ */
 }
 
