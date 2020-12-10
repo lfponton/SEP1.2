@@ -34,7 +34,7 @@ public class LoadData
     for (int i = 1; i <= 21; i++)
     {
       String id = Integer.toString(i);
-      reqs.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", Date.today()));
+      reqs.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",  Date.today(),100, 0, luis));
     }
 
     TaskList tasks = new TaskList();
@@ -54,7 +54,7 @@ public class LoadData
     for (int i = 1; i <= 31; i++)
     {
       String id = Integer.toString(i);
-      reqs1.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", Date.today()));
+      reqs1.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",  Date.today(),100, 0, luis));
     }
 
     TaskList tasks1 = new TaskList();
@@ -74,7 +74,7 @@ public class LoadData
     for (int i = 1; i <= 51; i++)
     {
       String id = Integer.toString(i);
-      reqs2.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", Date.today()));
+      reqs2.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",  Date.today(),100, 0, luis));
     }
 
     TaskList tasks2 = new TaskList();

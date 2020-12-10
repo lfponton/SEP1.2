@@ -32,14 +32,27 @@ public class Requirement implements Serializable
     tasks = new TaskList();
   }
 
-  public Requirement(String id, String status, String description)
+  public Requirement(String id, String status, String description, Date deadline, Employee teamMember)
   {
     this.id = id;
     this.status = status;
     this.description = description;
+    this.deadline = deadline;
+    this.teamMember = teamMember;
     tasks = new TaskList();
   }
 
+  public Requirement(String id, String status, String description, Date deadline, double timeEstimate, double totalHours, Employee teamMember)
+  {
+    this.id = id;
+    this.status = status;
+    this.description = description;
+    this.deadline = deadline;
+    this.timeEstimate = timeEstimate;
+    this.totalHours = totalHours;
+    this.teamMember = teamMember;
+    tasks = new TaskList();
+  }
 
   public Requirement()
   {
@@ -70,6 +83,21 @@ public class Requirement implements Serializable
   public Date getDeadline()
   {
     return deadline;
+  }
+
+  public Employee getTeamMember()
+  {
+    return teamMember;
+  }
+
+  public double getTotalHours()
+  {
+    return totalHours;
+  }
+
+  public double getTimeEstimate()
+  {
+    return timeEstimate;
   }
 
   // Setters
