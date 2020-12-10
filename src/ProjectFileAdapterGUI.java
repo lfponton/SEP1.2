@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -160,6 +161,17 @@ public class ProjectFileAdapterGUI extends Application
 
   private Button taskCreateButton;
 
+  private HBox selectedTaskPane;
+  private Label selectedTaskProjectIdLabel;
+  private Label selectedTaskProjectIdOutput;
+  private Label selectedTaskReqIdLabel;
+  private Label selectedTaskReqIdOutput;
+  private Label selectedTaskIdLabel;
+  private Label selectedTaskIdOutput;
+
+  private ComboBox<Employee> taskTMBox;
+  private ComboBox<String> taskStatusBox;
+
   // Employees Tab
 
   private EmployeeFileAdapter employeeAdapter;
@@ -214,6 +226,7 @@ public class ProjectFileAdapterGUI extends Application
   private MyTabListener tabListener;
   private MyProjectListListener projectListener;
   private MyReqListListener reqListener;
+  private MyTaskListListener taskListener;
 
   /**
    * @param window The Stage object that will be displayed
@@ -231,6 +244,7 @@ public class ProjectFileAdapterGUI extends Application
     tabListener = new MyTabListener();
     projectListener = new MyProjectListListener();
     reqListener = new MyReqListListener();
+    taskListener = new MyTaskListListener();
 
     tabPane = new TabPane();
     tabPane.getSelectionModel().selectedItemProperty().addListener(tabListener);
@@ -425,25 +439,47 @@ public class ProjectFileAdapterGUI extends Application
     allTasksTable = new TableView<Task>();
     taskDefaultSelectionModel = allTasksTable.getSelectionModel();
     allTasksTable.setPrefHeight(290);
+    allTasksTable.getSelectionModel().selectedItemProperty()
+      .addListener(taskListener);
 
     taskIdColumn = new TableColumn<Task, String>("Task ID");
     taskIdColumn
         .setCellValueFactory(new PropertyValueFactory<Task, String>("id"));
-    taskIdColumn.setPrefWidth(165);
+    taskIdColumn.setPrefWidth(50);
 
     taskStatusColumn = new TableColumn<Task, String>("Status");
     taskStatusColumn
         .setCellValueFactory(new PropertyValueFactory<Task, String>("Status"));
-    taskStatusColumn.setPrefWidth(165);
+    taskStatusColumn.setPrefWidth(100);
 
     taskDescriptionColumn = new TableColumn<Task, String>("Description");
     taskDescriptionColumn.setCellValueFactory(
         new PropertyValueFactory<Task, String>("Description"));
-    taskDescriptionColumn.setPrefWidth(165);
+    taskDescriptionColumn.setPrefWidth(350);
+
+    taskDeadlineColumn = new TableColumn<Task, String>("Deadline");
+    taskDeadlineColumn.setCellValueFactory( new PropertyValueFactory<Task, String>("Deadline"));
+    taskDeadlineColumn.setPrefWidth(100);
+
+    taskTimeEstimateColumn = new TableColumn<Task, String>("Time Estimate");
+    taskTimeEstimateColumn.setCellValueFactory( new PropertyValueFactory<Task, String>("TimeEstimate"));
+    taskTimeEstimateColumn.setPrefWidth(100);
+
+    taskTotalHoursColumn = new TableColumn<Task, String>("Total Hours");
+    taskTotalHoursColumn.setCellValueFactory( new PropertyValueFactory<Task, String>("TotalHours"));
+    taskTotalHoursColumn.setPrefWidth(100);
+
+    taskTeamMemberColumn = new TableColumn<Task, String>("Team Member");
+    taskTeamMemberColumn.setCellValueFactory( new PropertyValueFactory<Task, String>("TeamMember"));
+    taskTeamMemberColumn.setPrefWidth(100);
 
     allTasksTable.getColumns().add(taskIdColumn);
     allTasksTable.getColumns().add(taskStatusColumn);
     allTasksTable.getColumns().add(taskDescriptionColumn);
+    allTasksTable.getColumns().add(taskDeadlineColumn);
+    allTasksTable.getColumns().add(taskTimeEstimateColumn);
+    allTasksTable.getColumns().add(taskTotalHoursColumn);
+    allTasksTable.getColumns().add(taskTeamMemberColumn);
 
     taskTablePane = new FlowPane();
     taskTablePane.setAlignment(Pos.BASELINE_RIGHT);
@@ -453,17 +489,43 @@ public class ProjectFileAdapterGUI extends Application
     taskIdLabel = new Label("Task ID:");
     taskStatusLabel = new Label("Status:");
     taskDescriptionLabel = new Label("Description:");
+    taskDayLabel = new Label("Day:");
+    taskMonthLabel = new Label("Month:");
+    taskYearLabel = new Label("Year:");
+    taskTimeEstimateLabel = new Label("Time Estimate:");
+    taskTotalHoursLabel = new Label("Total Hours:");
+    taskTeamMemberLabel = new Label("Team Member:");
 
     taskIdField = new TextField();
     taskStatusField = new TextField();
     taskDescriptionField = new TextField();
+    taskDayField = new TextField();
+    taskMonthField = new TextField();
+    taskYearField = new TextField();
+    taskTimeEstimateField = new TextField();
+    taskTotalHoursField = new TextField();
+
+    taskTMBox = new ComboBox<Employee>();
+    taskTMBox.setOnAction(listener);
+
+
+    String[] status = {"Not Started", "Started", "Ended"};
+    taskStatusBox = new ComboBox<String>(FXCollections
+        .observableArrayList(status));
+    taskStatusBox.setOnAction(listener);
 
     taskInputPane = new GridPane();
     taskInputPane.setHgap(5);
     taskInputPane.setVgap(5);
     taskInputPane.addRow(0, taskIdLabel, taskIdField);
-    taskInputPane.addRow(1, taskStatusLabel, taskStatusField);
+    taskInputPane.addRow(1, taskStatusLabel, taskStatusBox);
     taskInputPane.addRow(2, taskDescriptionLabel, taskDescriptionField);
+    taskInputPane.addRow(3, taskDayLabel, taskDayField);
+    taskInputPane.addRow(4, taskMonthLabel, taskMonthField);
+    taskInputPane.addRow(5, taskYearLabel, taskYearField);
+    taskInputPane.addRow(6, taskTimeEstimateLabel, taskTimeEstimateField);
+    taskInputPane.addRow(7, taskTotalHoursLabel, taskTotalHoursField);
+    taskInputPane.addRow(8, taskTeamMemberLabel, taskTMBox);
 
     taskTopPane.getChildren().add(taskInputPane);
     taskTopPane.getChildren().add(allTasksTable);
@@ -475,6 +537,19 @@ public class ProjectFileAdapterGUI extends Application
     imagePane.setAlignment(Pos.BOTTOM_CENTER);
     imagePane.getChildren().add(logoView);
 */
+
+    selectedTaskPane = new HBox(20);
+    selectedTaskProjectIdLabel = new Label("Selected Project:");
+    selectedTaskProjectIdOutput = new Label();
+    selectedTaskReqIdLabel = new Label("Selected Requirement:");
+    selectedTaskReqIdOutput = new Label();
+    selectedTaskIdLabel = new Label("Selected Task");
+    selectedTaskIdOutput = new Label();
+    selectedTaskPane.getChildren().addAll(selectedTaskProjectIdLabel, selectedTaskProjectIdOutput,
+            selectedTaskReqIdLabel, selectedTaskReqIdOutput,
+            selectedTaskIdLabel, selectedTaskIdOutput);
+
+    taskPane.getChildren().add(selectedTaskPane);
     taskPane.getChildren().add(taskTopPane);
     taskPane.getChildren().add(taskCreateButton);
 
@@ -655,6 +730,7 @@ public class ProjectFileAdapterGUI extends Application
 
     String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
         .getId();
+
     String reqId = allReqsTable.getSelectionModel().getSelectedItem().getId();
 
     TaskList tasks = adapter.getAllTasks(projectId, reqId);
@@ -722,6 +798,52 @@ public class ProjectFileAdapterGUI extends Application
             .getId();
         selectedReqIdOutput.setText(reqId);
       }
+    }
+  }
+
+  public void updateSelectedTask()
+  {
+    if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
+    {
+      String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
+          .getId();
+      selectedTaskProjectIdOutput.setText(projectId);
+
+      if (allReqsTable.getSelectionModel().getSelectedItem() != null)
+      {
+        String reqId = allReqsTable.getSelectionModel().getSelectedItem()
+            .getId();
+        selectedTaskReqIdOutput.setText(reqId);
+
+        if (allTasksTable.getSelectionModel().getSelectedItem() != null)
+        {
+          String taskId = allTasksTable.getSelectionModel().getSelectedItem().getId();
+          selectedTaskIdOutput.setText(taskId);
+        }
+      }
+
+    }
+  }
+
+  public void updateTaskBox()
+  {
+    int currentIndex = taskTMBox.getSelectionModel().getSelectedIndex();
+
+    taskTMBox.getItems().clear();
+
+    EmployeeList employees = employeeAdapter.getAllEmployees();
+    for (int i = 0; i < employees.size(); i++)
+    {
+      taskTMBox.getItems().add(employees.getEmployee(i));
+    }
+
+    if (currentIndex == -1 && taskTMBox.getItems().size() > 0)
+    {
+      taskTMBox.getSelectionModel().select(0);
+    }
+    else
+    {
+      taskTMBox.getSelectionModel().select(currentIndex);
     }
   }
 
@@ -813,15 +935,23 @@ public class ProjectFileAdapterGUI extends Application
       else if (e.getSource() == taskCreateButton)
       {
         String id = taskIdField.getText();
-        String status = taskStatusField.getText();
+        String status = taskStatusBox.getValue();
         String description = taskDescriptionField.getText();
+        int day = Integer.parseInt(taskDayField.getText());
+        int month = Integer.parseInt(taskMonthField.getText());
+        int year = Integer.parseInt(taskYearField.getText());
+        double timeEstimate = Double.parseDouble(taskTimeEstimateField.getText());
+        double totalHours = Double.parseDouble(taskTotalHoursField.getText());
+        Employee teamMember = taskTMBox.getValue();
 
         if (description.equals(""))
         {
           description = "?";
         }
 
-        Task task = new Task(id, status, description);
+        Date date = new Date(day, month, year);
+        Task task = new Task(id, status, description, timeEstimate,
+            totalHours, date, teamMember);
         String projectId = allProjectsTable.getSelectionModel()
             .getSelectedItem().getId();
         String reqId = allReqsTable.getSelectionModel().getSelectedItem()
@@ -854,6 +984,11 @@ public class ProjectFileAdapterGUI extends Application
         roleField.setText("");
       }
 
+      else if (e.getSource() == taskTMBox);
+      {
+        Employee temp = taskTMBox.getSelectionModel().getSelectedItem();
+      }
+
     }
   }
 
@@ -874,18 +1009,14 @@ public class ProjectFileAdapterGUI extends Application
       }
       else if (newTab == reqTab)
       {
-        if (allReqsTable.getSelectionModel().getSelectedItem() != null)
-        {
           updateReqTable();
           updateSelectedReq();
-        }
       }
       else if (newTab == taskTab)
       {
-        if (allReqsTable.getSelectionModel().getSelectedItem() != null)
-        {
           updateTaskTable();
-        }
+          updateSelectedTask();
+          updateTaskBox();
       }
       else if (newTab == employeeTab)
       {
@@ -905,11 +1036,11 @@ public class ProjectFileAdapterGUI extends Application
       if (temp != null)
       {
         updateSelectedProject();
-        /*
+
         projectIdField.setText(temp.getId());
         projectTitleField.setText(temp.getTitle());
         projectDescriptionField.setPromptText(temp.getDescription());
-         */
+
       }
     }
   }
@@ -930,21 +1061,22 @@ public class ProjectFileAdapterGUI extends Application
       }
     }
   }
-/*
-  public void changed(ObservableValue<? extends Task> task, Task oldTask,
-      Task newTask)
+  private class MyTaskListListener implements ChangeListener<Task>
   {
-    Task temp = allTasksTable.getSelectionModel().getSelectedItem();
-
-    if (temp != null)
+    public void changed(ObservableValue<? extends Task> task, Task oldTask, Task newTask)
     {
-      taskIdField.setText(temp.getId());
-      taskStatusField.setText(temp.getStatus());
-      taskDescriptionField.setPromptText(temp.getDescription());
+      Task temp = allTasksTable.getSelectionModel().getSelectedItem();
+
+      if (temp != null)
+      {
+        updateSelectedTask();
+        taskIdField.setText(temp.getId());
+        taskStatusField.setText(temp.getStatus());
+        taskDescriptionField.setPromptText(temp.getDescription());
+      }
     }
+
   }
 
-
- */
 }
 

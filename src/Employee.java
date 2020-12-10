@@ -12,6 +12,10 @@ public class Employee implements Serializable
     this.role = role;
   }
 
+  public Employee(String firstName)
+  {
+    this.firstName = firstName;
+  }
   // Getters
   public String getFirstName() {
     return firstName;
@@ -40,4 +44,8 @@ public class Employee implements Serializable
   }
   // toString
 
+  public String toString()
+  {
+    return lastName + ", " + firstName;
+  }
 }

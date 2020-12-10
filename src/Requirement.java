@@ -82,6 +82,33 @@ public class Requirement implements Serializable
     this.tasks = tasks;
   }
 
+
+  // Check if all tasks are done
+  public boolean tasksDone()
+  {
+    TaskList tasks = getTasks();
+    int size = tasks.size();
+    int count = 0;
+    boolean areDone = false;
+
+    if (size != 0)
+    {
+      for (int i = 0; i <= size; i++)
+      {
+        if (tasks.getTask(i) != null && tasks.getTask(i).getStatus()
+            .equals("Ended"))
+        {
+          count++;
+        }
+      }
+      if (size == count)
+      {
+        areDone = true;
+      }
+    }
+    return areDone;
+  }
+
   // toString
   public String toString()
   {

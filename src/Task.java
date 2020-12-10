@@ -17,12 +17,17 @@ public class Task implements Serializable
   }
 
   // TEST CONSTRUCTOR
-  public Task(String requirementId, String id, String status, String description)
+  public Task(String id, String status,
+      String description, double timeEstimate, double totalHours, Date deadline,
+      Employee teamMember)
   {
-    this.requirementId = requirementId;
     this.id = id;
     this.description = description;
     this.status = status;
+    this.deadline = deadline;
+    this.timeEstimate = timeEstimate;
+    this.totalHours = totalHours;
+    this.teamMember = teamMember;
   }
 
   public Task(String id, String status, String description)
@@ -51,6 +56,31 @@ public class Task implements Serializable
   public String getStatus()
   {
     return status;
+  }
+
+  public String getRequirementId()
+  {
+    return requirementId;
+  }
+
+  public double getTotalHours()
+  {
+    return totalHours;
+  }
+
+  public double getTimeEstimate()
+  {
+    return timeEstimate;
+  }
+
+  public Date getDeadline()
+  {
+    return deadline;
+  }
+
+  public Employee getTeamMember()
+  {
+    return teamMember;
   }
 
   // toString
