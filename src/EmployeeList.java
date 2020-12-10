@@ -16,6 +16,12 @@ public class EmployeeList implements Serializable
   {
     employees.add(employee);
   }
+
+  // Add Employee by index
+  public void addByIndex(int index, Employee employee)
+  {
+    employees.add(index, employee);
+  }
   // Several get methods
   // Return the Employee object at index if one exists,
   // else return null
@@ -70,6 +76,17 @@ public class EmployeeList implements Serializable
     return employees.size();
   }
 
+  // Removes an Employee
+  public void remove(Employee employee)
+  {
+    employees.remove(employee);
+  }
+
+  // Removes an Employee by index
+  public void removeByIndex(int index)
+  {
+    employees.remove(index);
+  }
   // toString
 
   // The toString method in ArrayList doesn't give a good result

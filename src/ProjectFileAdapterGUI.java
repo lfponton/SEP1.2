@@ -203,9 +203,9 @@ public class ProjectFileAdapterGUI extends Application
 
   private TextArea allEmployeeArea;
 
-  private Button getButton;
+  private Button employeeEditButton;
   private Button employeeCreateButton;
-  private Button updateButton;
+  private Button employeeRemoveButton;
 
   private ComboBox<Employee> employeeBox;
   private VBox employeePane;
@@ -596,6 +596,12 @@ public class ProjectFileAdapterGUI extends Application
     employeeCreateButton = new Button("Create");
     employeeCreateButton.setOnAction(listener);
 
+    employeeEditButton = new Button("Edit:");
+    employeeEditButton.setOnAction(listener);
+
+    employeeRemoveButton = new Button("Remove:");
+    employeeRemoveButton.setOnAction(listener);
+
     employeePane = new VBox(20);
     employeePane.setPadding(new Insets(10));
 
@@ -656,6 +662,8 @@ public class ProjectFileAdapterGUI extends Application
 */
     employeePane.getChildren().add(employeeTopPane);
     employeePane.getChildren().add(employeeCreateButton);
+    employeePane.getChildren().add(employeeEditButton);
+    employeePane.getChildren().add(employeeRemoveButton);
 
     //employeePane.getChildren().add(imagePane);
     employeeTab = new Tab("Employees");
@@ -1026,6 +1034,14 @@ public class ProjectFileAdapterGUI extends Application
         String lastName = lastNameField.getText();
         String role = roleField.getText();
 
+        if (firstName.equals(""))
+        {
+          firstName = "?";
+        }
+        if (lastName.equals(""))
+        {
+          lastName = "?";
+        }
         if (role.equals(""))
         {
           role = "?";
@@ -1040,6 +1056,46 @@ public class ProjectFileAdapterGUI extends Application
         roleField.setText("");
       }
 
+      else if (e.getSource() == employeeEditButton)
+      {
+        int currentIndex = allEmployeeTable.getSelectionModel().getSelectedIndex();
+        String firstName = firstNameField.getText();
+        String lastName = lastNameField.getText();
+        String role = roleField.getText();
+        EmployeeList employeeList = employeeAdapter.getAllEmployees();
+
+        if (role.equals(""))
+        {
+          role = employeeList.getEmployee(currentIndex).getRole();
+
+        }
+        if (firstName.equals("")) {
+          firstName = employeeList.getEmployee(currentIndex).getFirstName();
+        }
+        if (lastName.equals("")) {
+          lastName = employeeList.getEmployee(currentIndex).getLastName();
+        }
+
+        Employee employee = new Employee(firstName, lastName, role);
+        employeeList.remove(employeeList.getEmployee(currentIndex));
+        employeeList.addByIndex(currentIndex, employee);
+
+        employeeAdapter.saveEmployee(employeeList);
+        updateEmployeeTable();
+        firstNameField.setText("");
+        lastNameField.setText("");
+        roleField.setText("");
+      }
+      else if (e.getSource() == employeeRemoveButton)
+      {
+        int currentIndex = allEmployeeTable.getSelectionModel().getSelectedIndex();
+        EmployeeList employeeList = employeeAdapter.getAllEmployees();
+
+        employeeList.removeByIndex(currentIndex);
+
+        employeeAdapter.saveEmployee(employeeList);
+        updateEmployeeTable();
+      }
     }
   }
 
