@@ -204,6 +204,8 @@ public class ProjectFileAdapterGUI extends Application
   private TextField lastNameField;
   private TextField roleField;
 
+  private ComboBox<String> rolesStatusBox;
+
   private Tab editEmployeeTab;
   private Tab allEmployeeTab;
   private Tab editAreaMenuItem;
@@ -666,12 +668,18 @@ public class ProjectFileAdapterGUI extends Application
     lastNameField = new TextField();
     roleField = new TextField();
 
+    // comboBox for roles
+
+    String[] roleStatus = {"Project Owner", "Project Creator", "Scrum Master", "Team Member"};
+    rolesStatusBox = new ComboBox<String>(FXCollections
+        .observableArrayList(roleStatus));
+
     employeeInputPane = new GridPane();
     employeeInputPane.setHgap(5);
     employeeInputPane.setVgap(5);
     employeeInputPane.addRow(0, firstNameLabel, firstNameField);
     employeeInputPane.addRow(1, lastNameLabel, lastNameField);
-    employeeInputPane.addRow(2, roleLabel, roleField);
+    employeeInputPane.addRow(2, roleLabel, rolesStatusBox);
 
     employeeTopPane.getChildren().add(employeeInputPane);
     employeeTopPane.getChildren().add(allEmployeeTable);
@@ -1205,7 +1213,7 @@ public class ProjectFileAdapterGUI extends Application
       {
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
-        String role = roleField.getText();
+        String role = rolesStatusBox.getValue();
 
         if (firstName.equals(""))
         {
@@ -1215,7 +1223,7 @@ public class ProjectFileAdapterGUI extends Application
         {
           lastName = "?";
         }
-        if (role.equals(""))
+        if (role == null)
         {
           role = "?";
         }
@@ -1226,7 +1234,7 @@ public class ProjectFileAdapterGUI extends Application
         updateEmployeeTable();
         firstNameField.setText("");
         lastNameField.setText("");
-        roleField.setText("");
+        rolesStatusBox.setValue(null);
       }
 
       else if (e.getSource() == employeeEditButton)
@@ -1234,10 +1242,10 @@ public class ProjectFileAdapterGUI extends Application
         int currentIndex = allEmployeeTable.getSelectionModel().getSelectedIndex();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
-        String role = roleField.getText();
+        String role = rolesStatusBox.getValue();
         EmployeeList employeeList = employeeAdapter.getAllEmployees();
 
-        if (role.equals(""))
+        if (role == null)
         {
           role = employeeList.getEmployee(currentIndex).getRole();
 
@@ -1257,7 +1265,6 @@ public class ProjectFileAdapterGUI extends Application
         updateEmployeeTable();
         firstNameField.setText("");
         lastNameField.setText("");
-        roleField.setText("");
       }
 
       else if (e.getSource() == reqEditButton)
