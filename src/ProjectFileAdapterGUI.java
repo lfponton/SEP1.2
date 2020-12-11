@@ -178,7 +178,10 @@ public class ProjectFileAdapterGUI extends Application
 
   private Tab employeeTab;
 
+
   private HBox employeeTopPane;
+  private HBox employeeButtonsPane;
+
   private FlowPane employeeTablePane;
 
   private Label firstNameLabel;
@@ -195,7 +198,10 @@ public class ProjectFileAdapterGUI extends Application
 
   private TextField firstNameField;
   private TextField lastNameField;
-  private TextField roleField;
+
+
+  private ComboBox<String> rolesStatusBox;
+
 
   private Tab editEmployeeTab;
   private Tab allEmployeeTab;
@@ -235,8 +241,8 @@ public class ProjectFileAdapterGUI extends Application
   {
     window.setTitle("ColourIT Project Manager");
 
-    String projectsFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\projects.bin";
-    String employeesFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\employees.bin";
+    String projectsFile = "projects.bin";
+    String employeesFile = "employee.bin";
 
     adapter = new ProjectFileAdapter(projectsFile);
     employeeAdapter = new EmployeeFileAdapter(employeesFile);
@@ -602,6 +608,9 @@ public class ProjectFileAdapterGUI extends Application
     employeeRemoveButton = new Button("Remove:");
     employeeRemoveButton.setOnAction(listener);
 
+    employeeButtonsPane = new HBox(20);
+    employeeButtonsPane.getChildren().addAll(employeeCreateButton, employeeEditButton, employeeRemoveButton);
+
     employeePane = new VBox(20);
     employeePane.setPadding(new Insets(10));
 
@@ -641,17 +650,27 @@ public class ProjectFileAdapterGUI extends Application
 
     firstNameField = new TextField();
     lastNameField = new TextField();
-    roleField = new TextField();
+
+    // comboBox for roles
+
+    String[] roleStatus = {"Project Owner", "Project Creator", "Scrum Master", "Team Member"};
+    rolesStatusBox = new ComboBox<String>(FXCollections
+            .observableArrayList(roleStatus));
+
 
     employeeInputPane = new GridPane();
     employeeInputPane.setHgap(5);
     employeeInputPane.setVgap(5);
     employeeInputPane.addRow(0, firstNameLabel, firstNameField);
     employeeInputPane.addRow(1, lastNameLabel, lastNameField);
-    employeeInputPane.addRow(2, roleLabel, roleField);
+    employeeInputPane.addRow(2, roleLabel, rolesStatusBox);
 
     employeeTopPane.getChildren().add(employeeInputPane);
     employeeTopPane.getChildren().add(allEmployeeTable);
+
+
+
+
 /*
     logo = new Image("file:img/vialogoah.gif");
     logoView = new ImageView(logo);
@@ -660,10 +679,8 @@ public class ProjectFileAdapterGUI extends Application
     imagePane.setAlignment(Pos.BOTTOM_CENTER);
     imagePane.getChildren().add(logoView);
 */
-    employeePane.getChildren().add(employeeTopPane);
-    employeePane.getChildren().add(employeeCreateButton);
-    employeePane.getChildren().add(employeeEditButton);
-    employeePane.getChildren().add(employeeRemoveButton);
+    employeePane.getChildren().addAll(employeeTopPane, employeeButtonsPane);
+
 
     //employeePane.getChildren().add(imagePane);
     employeeTab = new Tab("Employees");
@@ -1032,7 +1049,7 @@ public class ProjectFileAdapterGUI extends Application
       {
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
-        String role = roleField.getText();
+        String role = rolesStatusBox.getValue();
 
         if (firstName.equals(""))
         {
@@ -1053,7 +1070,7 @@ public class ProjectFileAdapterGUI extends Application
         updateEmployeeTable();
         firstNameField.setText("");
         lastNameField.setText("");
-        roleField.setText("");
+        rolesStatusBox.setValue("");
       }
 
       else if (e.getSource() == employeeEditButton)
@@ -1061,7 +1078,7 @@ public class ProjectFileAdapterGUI extends Application
         int currentIndex = allEmployeeTable.getSelectionModel().getSelectedIndex();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
-        String role = roleField.getText();
+        String role = rolesStatusBox.getValue();
         EmployeeList employeeList = employeeAdapter.getAllEmployees();
 
         if (role.equals(""))
@@ -1084,7 +1101,7 @@ public class ProjectFileAdapterGUI extends Application
         updateEmployeeTable();
         firstNameField.setText("");
         lastNameField.setText("");
-        roleField.setText("");
+        rolesStatusBox.setValue("");
       }
       else if (e.getSource() == employeeRemoveButton)
       {
