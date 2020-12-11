@@ -2,15 +2,11 @@ public class LoadData
 {
   public static void main(String[] args)
   {
-    // This class is only used to load data into the file. If you run this in your
-    // system, remember to change the file path in the file variable.
-
-    String projectsFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\projects.bin";
-    String employeesFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\employees.bin";
+    // This class is only used to load data into the file.
 
     ProjectFileAdapter pfa = new ProjectFileAdapter(
-        projectsFile);
-    EmployeeFileAdapter efa = new EmployeeFileAdapter(employeesFile);
+        "projects.bin");
+    EmployeeFileAdapter efa = new EmployeeFileAdapter("employees.bin");
 
     EmployeeList employees = new EmployeeList();
 
@@ -44,6 +40,7 @@ public class LoadData
       String id = Integer.toString(i);
       tasks.addTask(new Task(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 5, 0, Date.today(), alina));
     }
+
 
     reqs.getRequirement(0).setTasks(tasks);
 

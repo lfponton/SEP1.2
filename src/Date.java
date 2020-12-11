@@ -69,6 +69,21 @@ public class Date implements Serializable
     return daysInMonth;
   }
 
+  public int getDay()
+  {
+    return day;
+  }
+
+  public int getMonth()
+  {
+    return month;
+  }
+
+  public int getYear()
+  {
+    return year;
+  }
+
   public boolean equals(Object obj)
   {
     if (!(obj instanceof Date))

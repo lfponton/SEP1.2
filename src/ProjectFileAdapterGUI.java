@@ -57,6 +57,8 @@ public class ProjectFileAdapterGUI extends Application
   private TextField projectDescriptionField;
 
   private Button projectCreateButton;
+  private Button projectEditButton;
+  private Button projectRemoveButton;
 
   private HBox selectedProjectPane;
   private Label selectedProjectIdLabel;
@@ -160,6 +162,8 @@ public class ProjectFileAdapterGUI extends Application
   private TextField taskTeamMemberField;
 
   private Button taskCreateButton;
+  private Button taskEditButton;
+  private Button taskRemoveButton;
 
   private HBox selectedTaskPane;
   private Label selectedTaskProjectIdLabel;
@@ -235,11 +239,8 @@ public class ProjectFileAdapterGUI extends Application
   {
     window.setTitle("ColourIT Project Manager");
 
-    String projectsFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\projects.bin";
-    String employeesFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\employees.bin";
-
-    adapter = new ProjectFileAdapter(projectsFile);
-    employeeAdapter = new EmployeeFileAdapter(employeesFile);
+    adapter = new ProjectFileAdapter("projects.bin");
+    employeeAdapter = new EmployeeFileAdapter("employees.bin");
     listener = new MyActionListener();
     tabListener = new MyTabListener();
     projectListener = new MyProjectListListener();
@@ -252,6 +253,10 @@ public class ProjectFileAdapterGUI extends Application
     // Projects Tab
     projectCreateButton = new Button("Create");
     projectCreateButton.setOnAction(listener);
+    projectEditButton = new Button("Edit");
+    projectEditButton.setOnAction(listener);
+    projectRemoveButton = new Button("Remove");
+    projectRemoveButton.setOnAction(listener);
 
     projectPane = new VBox(20);
     projectPane.setPadding(new Insets(10));
@@ -323,6 +328,8 @@ public class ProjectFileAdapterGUI extends Application
     projectPane.getChildren().add(selectedProjectPane);
     projectPane.getChildren().add(projectTopPane);
     projectPane.getChildren().add(projectCreateButton);
+    projectPane.getChildren().add(projectEditButton);
+    projectPane.getChildren().add(projectRemoveButton);
 
     //projectPane.getChildren().add(imagePane);
     projectTab = new Tab("Projects");
@@ -466,6 +473,12 @@ public class ProjectFileAdapterGUI extends Application
     taskCreateButton = new Button("Create");
     taskCreateButton.setOnAction(listener);
 
+    taskEditButton = new Button("Edit");
+    taskEditButton.setOnAction(listener);
+
+    taskRemoveButton = new Button("Remove");
+    taskRemoveButton.setOnAction(listener);
+
     taskPane = new VBox(20);
     taskPane.setPadding(new Insets(10));
 
@@ -585,6 +598,8 @@ public class ProjectFileAdapterGUI extends Application
     taskPane.getChildren().add(selectedTaskPane);
     taskPane.getChildren().add(taskTopPane);
     taskPane.getChildren().add(taskCreateButton);
+    taskPane.getChildren().add(taskEditButton);
+    taskPane.getChildren().add(taskRemoveButton);
 
     //projectPane.getChildren().add(imagePane);
 
@@ -963,7 +978,53 @@ public class ProjectFileAdapterGUI extends Application
         projectTitleField.setText("");
         projectDescriptionField.setText("");
       }
+      else if (e.getSource() == projectEditButton)
+      {
+        int currentIndex = allProjectsTable.getSelectionModel().getSelectedIndex();
 
+        String id = projectIdField.getText();
+        String title = projectTitleField.getText();
+        String description = projectDescriptionField.getText();
+
+        ProjectList projects = adapter.getAllProjects();
+
+        if (id.equals(""))
+        {
+          id = projects.getProject(currentIndex).getId();
+        }
+        if (description.equals(""))
+        {
+          description = projects.getProject(currentIndex).getDescription();
+        }
+        if (title.equals(""))
+        {
+          title = projects.getProject(currentIndex).getTitle();
+        }
+
+        Project project = new Project(id, title, description);
+        RequirementList requirements = projects.getProject(currentIndex).getRequirements();
+        project.setRequirements(requirements);
+
+        projects.removeProjectByIndex(currentIndex);
+        projects.addProject(currentIndex, project);
+        adapter.saveProjects(projects);
+        updateProjectsTable();
+        projectIdField.setText("");
+        projectTitleField.setText("");
+        projectDescriptionField.setText("");
+      }
+      else if (e.getSource() == projectRemoveButton)
+      {
+        int currentIndex = allProjectsTable.getSelectionModel().getSelectedIndex();
+
+        ProjectList projects = adapter.getAllProjects();
+
+        projects.removeProjectByIndex(currentIndex);
+
+        adapter.saveProjects(projects);
+        updateProjectsTable();
+        updateTaskTable();
+      }
       else if (e.getSource() == reqCreateButton)
       {
         String id = reqIdField.getText();
@@ -1026,6 +1087,110 @@ public class ProjectFileAdapterGUI extends Application
         taskIdField.setText("");
         taskStatusField.setText("");
         taskDescriptionField.setText("");
+      }
+
+      else if (e.getSource() == taskEditButton)
+      {
+        int currentIndex = allTasksTable.getSelectionModel().getSelectedIndex();
+
+        String projectId = allProjectsTable.getSelectionModel()
+            .getSelectedItem().getId();
+        String reqId = allReqsTable.getSelectionModel().getSelectedItem()
+            .getId();
+
+        TaskList tasks = adapter.getAllTasks(projectId, reqId);
+
+        String id = taskIdField.getText();
+        String status = taskStatusBox.getValue();
+        String description = taskDescriptionField.getText();
+        int day;
+        if (!taskDayField.getText().equals(""))
+        {
+          day = Integer.parseInt(taskDayField.getText());
+        }
+        else
+        {
+          day = tasks.getTask(currentIndex).getDeadline().getDay();;
+        }
+        int month;
+        if (!taskMonthField.getText().equals(""))
+        {
+          month = Integer.parseInt(taskMonthField.getText());
+        }
+        else
+        {
+          month = tasks.getTask(currentIndex).getDeadline().getMonth();;
+        }
+        int year;
+        if (!taskYearField.getText().equals(""))
+        {
+          year = Integer.parseInt(taskYearField.getText());
+        }
+        else
+        {
+          year = tasks.getTask(currentIndex).getDeadline().getYear();;
+        }
+        double timeEstimate;
+        if (!taskTimeEstimateField.getText().equals(""))
+        {
+          timeEstimate = Double.parseDouble(taskTimeEstimateField.getText());
+        }
+        else
+        {
+          timeEstimate = tasks.getTask(currentIndex).getTimeEstimate();
+        }
+        double totalHours;
+        if (!taskTotalHoursField.getText().equals(""))
+        {
+          totalHours = Double.parseDouble(taskTotalHoursField.getText());
+        }
+        else
+        {
+          totalHours = tasks.getTask(currentIndex).getTotalHours();
+        }
+
+        Employee teamMember = taskTMBox.getValue();
+
+        if (id.equals(""))
+        {
+          id = tasks.getTask(currentIndex).getId();
+        }
+        if (description.equals("")) {
+          description = tasks.getTask(currentIndex).getDescription();
+        }
+
+        Date date = new Date(day, month, year);
+        Task task = new Task(id, status, description, timeEstimate, totalHours, date, teamMember);
+
+        tasks.remove(tasks.getTask(currentIndex));
+        tasks.addByIndex(currentIndex, task);
+
+        adapter.addTasks(projectId, reqId, tasks);
+        updateTaskTable();
+        taskIdField.setText("");
+        taskDescriptionField.setText("");
+        taskDayField.setText("");
+        taskMonthField.setText("");
+        taskYearField.setText("");
+        taskTimeEstimateField.setText("");
+        taskTotalHoursField.setText("");
+      }
+
+      else if (e.getSource() == taskRemoveButton)
+      {
+        int currentIndex = allTasksTable.getSelectionModel().getSelectedIndex();
+
+        String projectId = allProjectsTable.getSelectionModel()
+            .getSelectedItem().getId();
+        String reqId = allReqsTable.getSelectionModel().getSelectedItem()
+            .getId();
+
+        TaskList tasks = adapter.getAllTasks(projectId, reqId);
+
+        tasks.removeByIndex(currentIndex);
+
+        adapter.addTasks(projectId, reqId, tasks);
+        updateTaskTable();
       }
 
       else if (e.getSource() == employeeCreateButton)
