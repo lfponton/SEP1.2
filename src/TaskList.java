@@ -16,13 +16,31 @@ public class TaskList implements Serializable
   {
     return tasks.size();
   }
+
   public void addTask(Task task)
   {
     tasks.add(task);
   }
-  public void removeTask(Task task)
+
+  public void addByIndex(int index, Task task)
+  {
+    if (index < tasks.size())
+    {
+      tasks.add(index, task);
+    }
+  }
+
+  public void remove(Task task)
   {
     tasks.remove(task);
+  }
+
+  public void removeByIndex(int index)
+  {
+    if (index < tasks.size())
+    {
+      tasks.remove(index);
+    }
   }
 
   // Several get methods
@@ -43,7 +61,7 @@ public class TaskList implements Serializable
 
   public Task getTask(int index)
   {
-    if(index < tasks.size())
+    if (index < tasks.size())
     {
       return tasks.get(index);
     }
