@@ -25,6 +25,10 @@ public class RequirementList implements Serializable
     requirements.remove(requirement);
   }
 
+  public void removeReqByIndex(int index)
+  {
+    requirements.remove(index);
+  }
   // Several get methods
   // Return the Requirement object at index if one exists,
   // else return null
@@ -64,5 +68,10 @@ public class RequirementList implements Serializable
      str += r.toString();
     }
     return str;
+  }
+
+  public void add(int currentIndex, Requirement requirement)
+  {
+    requirements.add(currentIndex, requirement);
   }
 }

@@ -30,6 +30,7 @@ public class ProjectFileAdapter
     }
   }
 
+
   // Use the MyFileIO class to retrieve a ProjectList object with all Projects
   public ProjectList getAllProjects()
   {
@@ -94,6 +95,14 @@ public class ProjectFileAdapter
 
     requirements.addRequirement(requirement);
 
+    projects.getProjectById(projectId).setRequirements(requirements);
+
+    saveProjects(projects);
+  }
+
+  public void addRequirements(String projectId, RequirementList requirements)
+  {
+    ProjectList projects = getAllProjects();
     projects.getProjectById(projectId).setRequirements(requirements);
 
     saveProjects(projects);

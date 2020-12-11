@@ -23,6 +23,9 @@ public class Requirement implements Serializable
    */
 
   // TEST CONSTRUCTORS
+
+  public Requirement()
+  {}
   public Requirement(String id, String status, String description, Date deadline)
   {
     this.id = id;
@@ -54,9 +57,19 @@ public class Requirement implements Serializable
     tasks = new TaskList();
   }
 
-  public Requirement()
+  public Requirement(String id, String status, String description,
+      Date deadline, Employee teamMember, double timeEstimate,
+      double totalHours)
   {
+    this.id = id;
+    this.status = status;
+    this.description = description;
+    this.deadline = deadline;
+    this.teamMember = teamMember;
+    this.timeEstimate = timeEstimate;
+    this.totalHours = totalHours;
   }
+
 
 
   // Getters

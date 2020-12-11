@@ -106,8 +106,11 @@ public class ProjectFileAdapterGUI extends Application
   private ImageView logoView;
 
   private Button reqCreateButton;
+  private Button reqEditButton;
+  private Button reqRemoveButton;
 
   private HBox selectedReqPane;
+  private HBox  reqButtomPane;
   private Label selectedReqProjectIdLabel;
   private Label selectedReqProjectIdOutput;
   private Label selectedReqIdLabel;
@@ -235,8 +238,8 @@ public class ProjectFileAdapterGUI extends Application
   {
     window.setTitle("ColourIT Project Manager");
 
-    String projectsFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\projects.bin";
-    String employeesFile = "C:\\Users\\lfpon\\IdeaProjects\\SEP1.2\\employees.bin";
+    String projectsFile = "C:\\Users\\agosm\\IdeaProjects\\SEP1.2\\projects.bin";
+    String employeesFile = "C:\\Users\\agosm\\IdeaProjects\\SEP1.2\\employees.bin";
 
     adapter = new ProjectFileAdapter(projectsFile);
     employeeAdapter = new EmployeeFileAdapter(employeesFile);
@@ -331,10 +334,14 @@ public class ProjectFileAdapterGUI extends Application
     // Requirements Tab
     reqCreateButton = new Button("Create");
     reqCreateButton.setOnAction(listener);
+    reqEditButton = new Button("Edit");
+    reqEditButton.setOnAction(listener);
+    reqRemoveButton = new Button("Remove");
+    reqRemoveButton.setOnAction(listener);
 
     reqPane = new VBox(20);
     reqPane.setPadding(new Insets(10));
-
+    reqButtomPane = new HBox(20);
     reqTopPane = new HBox(20);
 
     allReqsTable = new TableView<Requirement>();
@@ -451,10 +458,11 @@ public class ProjectFileAdapterGUI extends Application
     selectedReqPane.getChildren()
         .addAll(selectedReqProjectIdLabel, selectedReqProjectIdOutput,
             selectedReqIdLabel, selectedReqIdOutput);
-
+    reqButtomPane.getChildren().addAll(reqCreateButton,reqEditButton,reqRemoveButton);
     reqPane.getChildren().add(selectedReqPane);
     reqPane.getChildren().add(reqTopPane);
-    reqPane.getChildren().add(reqCreateButton);
+    reqPane.getChildren().add(reqButtomPane);
+
 
     //projectPane.getChildren().add(imagePane);
 
@@ -1085,6 +1093,114 @@ public class ProjectFileAdapterGUI extends Application
         firstNameField.setText("");
         lastNameField.setText("");
         roleField.setText("");
+      }
+
+      else if (e.getSource() == reqEditButton)
+      {
+        int currentIndex = allReqsTable.getSelectionModel().getSelectedIndex();
+
+        String id = reqIdField.getText();
+        String status = reqStatusBox.getValue();
+        String description = reqDescriptionField.getText();
+        int day;
+        int month;
+        int year;
+        double timeEstimate;
+        double totalHours ;
+        Employee teamMember =  reqTMBox.getValue();
+
+
+
+        String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
+            .getId();
+        RequirementList reqList = adapter.getAllRequirements(projectId);
+
+        if (id.equals(""))
+        {
+          id = reqList.getRequirement(currentIndex).getId();
+
+        }
+
+        if (description.equals("")) {
+          description = reqList.getRequirement(currentIndex).getDescription();
+        }
+
+        if (reqDayField.getText().equals("")) {
+          day = reqList.getRequirement(currentIndex).getDeadline().getDay();
+        }
+        else{
+          day = Integer.parseInt(reqDayField.getText());
+
+        }
+        if (reqMonthField.getText().equals("")) {
+          month = reqList.getRequirement(currentIndex).getDeadline().getMonth();
+        }
+        else{
+          month = Integer.parseInt(reqMonthField.getText());
+
+        }
+        if (reqYearField.getText().equals("")) {
+          year = reqList.getRequirement(currentIndex).getDeadline().getYear();
+        }
+        else{
+          year = Integer.parseInt(reqYearField.getText());
+
+        }
+        if (reqTimeEstimateField.getText().equals("") ) {
+          timeEstimate = reqList.getRequirement(currentIndex).getTimeEstimate();
+        }
+        else{
+          timeEstimate = Double.parseDouble(reqTimeEstimateField.getText());
+
+        }
+        if (reqTotalHoursField.getText().equals("") ) {
+          totalHours = reqList.getRequirement(currentIndex).getTotalHours();
+        }
+        else{
+          totalHours = Double.parseDouble(reqTotalHoursField.getText());
+
+        }
+
+
+        Date deadline = new Date(day, month, year);
+
+        Requirement requirement = new Requirement(id,status,description,deadline, teamMember,timeEstimate,totalHours);
+
+        reqList.removeRequirement(reqList.getRequirement(currentIndex));
+        reqList.add(currentIndex, requirement);
+        adapter.addRequirements(projectId, reqList);
+        updateReqTable();
+
+        reqIdField.setText("");
+        reqDescriptionField.setText("");
+        reqDayField.setText("");
+        reqMonthField.setText("");
+        reqYearField.setText("");
+        reqTimeEstimateField.setText("");
+        reqTotalHoursField.setText("");
+        reqStatusBox.setValue("");
+        reqTMBox.setValue(null);
+
+
+      }
+      else if (e.getSource() == reqRemoveButton)
+      {
+        String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
+            .getId();
+
+
+        int currentIndex = allReqsTable.getSelectionModel().getSelectedIndex();
+
+
+        ProjectList projects = adapter.getAllProjects();
+
+        RequirementList reqList = adapter.getAllRequirements(projectId);
+
+
+        reqList.removeReqByIndex(currentIndex);
+
+        adapter.addRequirements(projectId, reqList);
+        updateReqTable();
       }
       else if (e.getSource() == employeeRemoveButton)
       {
