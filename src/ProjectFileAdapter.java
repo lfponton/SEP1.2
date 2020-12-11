@@ -125,6 +125,19 @@ public class ProjectFileAdapter
     saveProjects(projects);
   }
 
+  public void addTasks(String projectId, String requirementId, TaskList tasks)
+  {
+    ProjectList projects = getAllProjects();
+
+    RequirementList requirements = getAllRequirements(projectId);
+
+    requirements.getRequirementById(requirementId).setTasks(tasks);
+
+    projects.getProjectById(projectId).setRequirements(requirements);
+
+    saveProjects(projects);
+  }
+
   // Edit and Remove methods below
   public void editProject(String id, Project editedProject)
   {

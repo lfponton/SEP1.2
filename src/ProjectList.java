@@ -29,6 +29,13 @@ public class ProjectList implements Serializable
   {
     projects.remove(project);
   }
+  public void removeProjectByIndex(int index)
+  {
+    if (index < projects.size())
+    {
+      projects.remove(index);
+    }
+  }
 
   // Several get methods
   public Project getProject(int index)
