@@ -83,6 +83,7 @@ public class Requirement implements Serializable
     this.timeEstimate = timeEstimate;
     this.deadline = deadline;
     this.teamMember = teamMember;
+    this.tasks = new TaskList();
   }
 
   // Getters
@@ -135,6 +136,7 @@ public class Requirement implements Serializable
   {
     return priority;
   }
+
 
   // Setters
   public void setDeadline(Date deadline)
@@ -195,9 +197,5 @@ public class Requirement implements Serializable
         + "\nTime Estimate: " + timeEstimate + "\nProject id: " + projectId + "\n";
   }
 
-  public Requirement copy()
-  {
-    return new Requirement(id, status, description, deadline, timeEstimate, totalHours, teamMember);
-  }
 }
 

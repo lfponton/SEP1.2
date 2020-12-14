@@ -110,9 +110,6 @@ public class ProjectFileAdapterGUI extends Application
   private TextField reqMonthField;
   private TextField reqYearField;
 
-  private FlowPane imagePane;
-  private Image logo;
-  private ImageView logoView;
 
   private Button reqCreateButton;
   private Button reqEditButton;
@@ -1192,7 +1189,7 @@ public class ProjectFileAdapterGUI extends Application
             timeEstimate = Double.parseDouble(taskTimeEstimateField.getText());
 
             if (reqs.getRequirementById(reqId)
-                .tooManyHours(currentEstimate, timeEstimate)
+                . tooManyHours(currentEstimate, timeEstimate)
                 && timeEstimate > currentEstimate)
             {
               timeEstimate = currentEstimate;
@@ -1494,6 +1491,7 @@ public class ProjectFileAdapterGUI extends Application
         String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
             .getId();
         RequirementList reqList = adapter.getAllRequirements(projectId);
+        TaskList tasks = reqList.getRequirement(currentIndex).getTasks();
         int day;
         int month;
         int year;
