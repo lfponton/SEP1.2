@@ -9,11 +9,12 @@ public class LoadData
     EmployeeFileAdapter efa = new EmployeeFileAdapter("employees.bin");
 
     EmployeeList employees = new EmployeeList();
-
+    /*Employee empty = new Employee("", "", "");*/
     Employee alina = new Employee("Alina", "Chelmus", "Team Member");
     Employee agos = new Employee("Agostina", "Mezzabotta", "Team Member");
     Employee luis = new Employee("Luis", "Fernandez", "Team Member");
 
+   // employees.add(empty);// do not delete
     employees.add(alina);
     employees.add(agos);
     employees.add(luis);
@@ -30,7 +31,9 @@ public class LoadData
     for (int i = 1; i <= 21; i++)
     {
       String id = Integer.toString(i);
-      reqs.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",  Date.today(),100, 0, luis));
+      String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+      reqs.addRequirement(new Requirement(id, "Functional", description, "Critical", "No Started",  100, 0, Date.today(),luis));
     }
 
     TaskList tasks = new TaskList();
@@ -71,7 +74,9 @@ public class LoadData
     for (int i = 1; i <= 51; i++)
     {
       String id = Integer.toString(i);
-      reqs2.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",  Date.today(),100, 0, luis));
+      String description = "Lorem ipsum dolor sit";
+
+      reqs.addRequirement(new Requirement(id, "Functional",description,"Critical","Non Started",100,100, Date.today(),   luis));
     }
 
     TaskList tasks2 = new TaskList();

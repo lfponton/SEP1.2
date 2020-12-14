@@ -70,7 +70,20 @@ public class Requirement implements Serializable
     this.totalHours = totalHours;
   }
 
-
+  public Requirement(String id, String type, String description,
+      String priority, String status, double totalHours, double timeEstimate,
+      Date deadline, Employee teamMember)
+  {
+    this.id = id;
+    this.type = type;
+    this.description = description;
+    this.priority = priority;
+    this.status = status;
+    this.totalHours = totalHours;
+    this.timeEstimate = timeEstimate;
+    this.deadline = deadline;
+    this.teamMember = teamMember;
+  }
 
   // Getters
   public String getId()
@@ -111,6 +124,16 @@ public class Requirement implements Serializable
   public double getTimeEstimate()
   {
     return timeEstimate;
+  }
+
+  public String getType()
+  {
+    return type;
+  }
+
+  public String getPriority()
+  {
+    return priority;
   }
 
   // Setters

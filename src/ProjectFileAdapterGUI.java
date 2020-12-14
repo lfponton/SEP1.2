@@ -1,7 +1,12 @@
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,11 +18,15 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * A user interface that allows for displaying and modifying information about projects.
@@ -81,12 +90,16 @@ public class ProjectFileAdapterGUI extends Application
   private Label reqMonthLabel;
   private Label reqYearLabel;
   private Label reqTMLabel;
+   private Label reqPriorityLabel;
+   private Label reqTypeLabel;
 
   private GridPane reqInputPane;
 
   private TableView<Requirement> allReqsTable;
   private TableView.TableViewSelectionModel<Requirement> reqDefaultSelectionModel;
   private TableColumn<Requirement, String> reqIdColumn;
+  private TableColumn<Requirement, String> reqTypeColumn;
+  private TableColumn<Requirement, String> reqPriorityColumn;
   private TableColumn<Requirement, String> reqStatusColumn;
   private TableColumn<Requirement, String> reqDescriptionColumn;
   private TableColumn<Requirement, String> reqTotalHoursColumn;
@@ -120,6 +133,9 @@ public class ProjectFileAdapterGUI extends Application
 
   private ComboBox<Employee> reqTMBox;
   private ComboBox<String> reqStatusBox;
+  private ComboBox<String> reqPriorityBox;
+  private ComboBox<String> reqTypeBox;
+
   // Tasks Tab
   private Tab taskTab;
   private VBox taskPane;
@@ -237,6 +253,13 @@ public class ProjectFileAdapterGUI extends Application
   private MyReqListListener reqListener;
   private MyTaskListListener taskListener;
 
+  //sear box
+  private Button projectSearchButton;
+  private TextField projectSearchField;
+  private Label projectSearchLabel;
+  private VBox projectSearchPane;
+  private FilteredList<Project> projectFilteredList;
+  private ObservableList<Project> projectObservableList;
   /**
    * @param window The Stage object that will be displayed
    */
@@ -255,6 +278,13 @@ public class ProjectFileAdapterGUI extends Application
     tabPane = new TabPane();
     tabPane.getSelectionModel().selectedItemProperty().addListener(tabListener);
 
+    //search box
+    projectSearchButton = new Button("Search");
+    projectSearchButton.setOnAction(listener);
+    projectSearchField = new TextField();
+    projectSearchLabel = new Label("Search Project by Id: ");
+    projectSearchPane = new VBox();
+    projectSearchPane.getChildren().addAll(projectSearchLabel, projectSearchField, projectSearchButton);
     // Projects Tab
     projectCreateButton = new Button("Create");
     projectCreateButton.setOnAction(listener);
@@ -293,6 +323,11 @@ public class ProjectFileAdapterGUI extends Application
     allProjectsTable.getSelectionModel().selectedItemProperty()
         .addListener(projectListener);
 
+    ///search
+    projectObservableList = FXCollections.observableArrayList();
+
+    projectFilteredList = new FilteredList<Project>(projectObservableList, e -> true );
+
     projectTablePane = new FlowPane();
     projectTablePane.setAlignment(Pos.BASELINE_RIGHT);
     projectTablePane.setPrefWidth(200);
@@ -314,6 +349,7 @@ public class ProjectFileAdapterGUI extends Application
     projectInputPane
         .addRow(2, projectDescriptionLabel, projectDescriptionField);
 
+    projectTopPane.getChildren().add(projectSearchPane);
     projectTopPane.getChildren().add(projectInputPane);
     projectTopPane.getChildren().add(allProjectsTable);
 /*
@@ -364,6 +400,18 @@ public class ProjectFileAdapterGUI extends Application
         new PropertyValueFactory<Requirement, String>("id"));
     reqIdColumn.setPrefWidth(50);
 
+    reqTypeColumn = new TableColumn<Requirement, String>("Type");
+    reqTypeColumn.setCellValueFactory(
+        new PropertyValueFactory<Requirement, String>("type"));
+    reqTypeColumn.setPrefWidth(100);
+
+
+    reqPriorityColumn = new TableColumn<Requirement, String>("Priority");
+    reqPriorityColumn.setCellValueFactory(
+        new PropertyValueFactory<Requirement, String>("priority"));
+    reqPriorityColumn.setPrefWidth(100);
+    reqPriorityColumn.setSortType(TableColumn.SortType.ASCENDING);
+
     reqStatusColumn = new TableColumn<Requirement, String>("Status");
     reqStatusColumn.setCellValueFactory(
         new PropertyValueFactory<Requirement, String>("Status"));
@@ -396,6 +444,8 @@ public class ProjectFileAdapterGUI extends Application
 
 
     allReqsTable.getColumns().add(reqIdColumn);
+    allReqsTable.getColumns().add(reqTypeColumn);
+    allReqsTable.getColumns().add(reqPriorityColumn);
     allReqsTable.getColumns().add(reqStatusColumn);
     allReqsTable.getColumns().add(reqDescriptionColumn);
     allReqsTable.getColumns().add(reqDeadlineColumn);
@@ -419,6 +469,8 @@ public class ProjectFileAdapterGUI extends Application
     reqTimeEstimateLabel = new Label("Time Estimate:");
     reqTotalHoursLabel = new Label("Total Hours");
     reqTMLabel = new Label("Team Member:");
+    reqPriorityLabel = new Label("Priority:");
+    reqTypeLabel = new Label("Type:");
 
     reqIdField = new TextField();
     reqDescriptionField = new TextField();
@@ -434,19 +486,33 @@ public class ProjectFileAdapterGUI extends Application
     reqStatusBox = new ComboBox<String>(FXCollections
         .observableArrayList(reqStatus));
 
+    reqPriorityBox = new ComboBox<String>();
+    String[] reqPriority = {"Critical", "High", "Low"};
+    reqPriorityBox = new ComboBox<String>(FXCollections
+        .observableArrayList(reqPriority));
+
+
+    reqTypeBox = new ComboBox<>();
+    String[] reqType = { "Functional", "Non Functional"};
+    reqTypeBox = new ComboBox<String>(FXCollections
+        .observableArrayList(reqType));
+
+
+
     reqInputPane = new GridPane();
     reqInputPane.setHgap(5);
     reqInputPane.setVgap(5);
     reqInputPane.addRow(0, reqIdLabel, reqIdField);
-    reqInputPane.addRow(1, reqStatusLabel, reqStatusBox);
-    reqInputPane.addRow(2, reqDescriptionLabel, reqDescriptionField);
-    reqInputPane.addRow(3, reqDayLabel, reqDayField);
-    reqInputPane.addRow(4, reqMonthLabel, reqMonthField);
-    reqInputPane.addRow(5, reqYearLabel, reqYearField);
-    reqInputPane.addRow(6, reqTimeEstimateLabel, reqTimeEstimateField);
-    reqInputPane.addRow(7, reqTotalHoursLabel, reqTotalHoursField);
-    reqInputPane.addRow(8, reqTMLabel, reqTMBox);
-
+    reqInputPane.addRow(1, reqPriorityLabel,reqPriorityBox);
+    reqInputPane.addRow(2, reqTypeLabel, reqTypeBox);
+    reqInputPane.addRow(3, reqStatusLabel, reqStatusBox);
+    reqInputPane.addRow(4, reqDescriptionLabel, reqDescriptionField);
+    reqInputPane.addRow(5, reqDayLabel, reqDayField);
+    reqInputPane.addRow(6, reqMonthLabel, reqMonthField);
+    reqInputPane.addRow(7, reqYearLabel, reqYearField);
+    reqInputPane.addRow(8, reqTimeEstimateLabel, reqTimeEstimateField);
+    reqInputPane.addRow(9, reqTotalHoursLabel, reqTotalHoursField);
+    reqInputPane.addRow(10, reqTMLabel, reqTMBox);
 
     reqTopPane.getChildren().add(reqInputPane);
     reqTopPane.getChildren().add(allReqsTable);
@@ -746,6 +812,7 @@ public class ProjectFileAdapterGUI extends Application
   /**
    * Updates the allProjectsTable with information from the projects file
    */
+
   public void updateProjectsTable()
   {
     int currentIndex = allProjectsTable.getSelectionModel().getSelectedIndex();
@@ -766,6 +833,32 @@ public class ProjectFileAdapterGUI extends Application
     {
       allProjectsTable.getSelectionModel().select(currentIndex);
     }
+  }
+
+  public void updateSortedProjects(String id)
+  {
+    int currentIndex = allProjectsTable.getSelectionModel().getSelectedIndex();
+
+    allProjectsTable.getItems().clear();
+
+
+    ProjectList projects = adapter.getAllProjects().getAllSearchedProjects(id);
+    for (int i = 0; i < projects.size(); i++)
+    {
+      allProjectsTable.getItems().add(projects.getProject(i));
+    }
+
+    if (currentIndex == -1 && allProjectsTable.getItems().size() > 0)
+    {
+      allProjectsTable.getSelectionModel().select(0);
+    }
+    else
+    {
+      allProjectsTable.getSelectionModel().select(currentIndex);
+    }
+
+
+
   }
 
   public void updateReqTable()
@@ -931,14 +1024,6 @@ public class ProjectFileAdapterGUI extends Application
       reqTMBox.getItems().add(employees.getEmployee(i));
     }
 
-    if (currentIndex == -1 && reqTMBox.getItems().size() > 0)
-    {
-      reqTMBox.getSelectionModel().select(0);
-    }
-    else
-    {
-      reqTMBox.getSelectionModel().select(currentIndex);
-    }
   }
 
   /*
@@ -1041,36 +1126,116 @@ public class ProjectFileAdapterGUI extends Application
         updateProjectsTable();
         updateTaskTable();
       }
+      else if (e.getSource() == projectSearchButton)
+      {
+
+        String id = projectSearchField.getText();
+        updateSortedProjects(id);
+      }
       else if (e.getSource() == reqCreateButton)
       {
         String id = reqIdField.getText();
         String status = reqStatusBox.getValue();
         String description = reqDescriptionField.getText();
-        int day = Integer.parseInt(reqDayField.getText());
-        int month = Integer.parseInt(reqMonthField.getText());
-        int year = Integer.parseInt(reqYearField.getText());
-        double timeEstimate = Double.parseDouble(reqTimeEstimateField.getText());
-        double totalHours = Double.parseDouble(reqTotalHoursField.getText());
+        String priority = reqPriorityBox.getValue();
+        String type = reqTypeBox.getValue();
+        int day;
+        int month;
+        int year;
+        double timeEstimate;
+        double totalHours;
         Employee teamMember = reqTMBox.getValue();
+
+        //time estimate
+
+        if (reqTimeEstimateField.getText().equals(""))
+        {
+          timeEstimate = 0;
+        }
+        else
+        {
+          timeEstimate = Double.parseDouble(reqTimeEstimateField.getText());
+        }
+
+        //totalHours
+        if (reqTotalHoursField.getText().equals(""))
+        {
+          totalHours = 0;
+        }
+        else
+        {
+          totalHours = Double.parseDouble(reqTotalHoursField.getText());
+        }
+        //date
+        if (reqDayField.getText().equals(""))
+        {
+          day = 0;
+        }
+        else
+        {
+          day = Integer.parseInt(reqDayField.getText());
+
+        }
+        if (reqMonthField.getText().equals(""))
+        {
+          month = 0;
+        }
+        else
+        {
+          month = Integer.parseInt(reqMonthField.getText());
+
+        }
+        if (reqYearField.getText().equals(""))
+        {
+          year = 0;
+        }
+        else
+        {
+          year = Integer.parseInt(reqYearField.getText());
+
+        }
+        if(reqStatusBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          status = "Not Specified";
+        }
+
+        if(reqPriorityBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          priority = "Not Specified";
+        }
+        if(reqTypeBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          type = "Not Specified";
+        }
+
+        if(reqTMBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          teamMember = new Employee("None","","");
+        }
+
         Date deadline = new Date(day, month, year);
 
         if (description.equals(""))
         {
-          description = "?";
+          description = "none";
         }
 
-        Requirement requirement = new Requirement(id, status, description,
-            deadline, timeEstimate, totalHours, teamMember);
-        String projectId = allProjectsTable.getSelectionModel()
-            .getSelectedItem().getId();
-
+        Requirement requirement = new Requirement(id, type, description,
+            priority, status, totalHours, timeEstimate, deadline, teamMember);
+        String projectId = allProjectsTable.getSelectionModel().getSelectedItem().getId();
         adapter.addRequirement(projectId, requirement);
+
+
         updateReqTable();
         reqIdField.setText("");
         reqDescriptionField.setText("");
         reqDayField.setText("");
         reqMonthField.setText("");
         reqYearField.setText("");
+        reqTMBox.setValue(null);
+        reqStatusBox.setValue(null);
+        reqPriorityBox.setValue(null);
+        reqTypeBox.setValue(null);
       }
 
       else if (e.getSource() == taskCreateButton)
@@ -1274,18 +1439,17 @@ public class ProjectFileAdapterGUI extends Application
         String id = reqIdField.getText();
         String status = reqStatusBox.getValue();
         String description = reqDescriptionField.getText();
+        String priority = reqPriorityBox.getValue();
+        String type = reqTypeBox.getValue();
+        String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
+            .getId();
+        RequirementList reqList = adapter.getAllRequirements(projectId);
         int day;
         int month;
         int year;
         double timeEstimate;
         double totalHours ;
-        Employee teamMember =  reqTMBox.getValue();
-
-
-
-        String projectId = allProjectsTable.getSelectionModel().getSelectedItem()
-            .getId();
-        RequirementList reqList = adapter.getAllRequirements(projectId);
+        Employee teamMember;
 
         if (id.equals(""))
         {
@@ -1323,20 +1487,41 @@ public class ProjectFileAdapterGUI extends Application
         }
         else{
           timeEstimate = Double.parseDouble(reqTimeEstimateField.getText());
-
         }
         if (reqTotalHoursField.getText().equals("") ) {
           totalHours = reqList.getRequirement(currentIndex).getTotalHours();
         }
         else{
           totalHours = Double.parseDouble(reqTotalHoursField.getText());
+        }
+        if(reqStatusBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          status = reqList.getRequirement(currentIndex).getStatus();
+        }
 
+        if(reqPriorityBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          priority = reqList.getRequirement(currentIndex).getPriority();
+        }
+        if(reqTypeBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          type = reqList.getRequirement(currentIndex).getType();
+        }
+
+
+        if(reqTMBox.getSelectionModel().getSelectedIndex() == -1)
+        {
+          teamMember = reqList.getRequirement(currentIndex).getTeamMember();
+        }
+        else{
+          teamMember = reqTMBox.getValue();
         }
 
 
         Date deadline = new Date(day, month, year);
 
-        Requirement requirement = new Requirement(id,status,description,deadline, teamMember,timeEstimate,totalHours);
+        Requirement requirement = new Requirement(id, type, description, priority, status,
+            totalHours, timeEstimate, deadline, teamMember);
 
         reqList.removeRequirement(reqList.getRequirement(currentIndex));
         reqList.add(currentIndex, requirement);
@@ -1350,8 +1535,10 @@ public class ProjectFileAdapterGUI extends Application
         reqYearField.setText("");
         reqTimeEstimateField.setText("");
         reqTotalHoursField.setText("");
-        reqStatusBox.setValue("");
+        reqStatusBox.setValue(null);
         reqTMBox.setValue(null);
+        reqPriorityBox.setValue(null);
+        reqTypeBox.setValue(null);
 
 
       }
@@ -1399,6 +1586,7 @@ public class ProjectFileAdapterGUI extends Application
     {
       if (newTab == projectTab)
       {
+        updateSortedProjects("");
         updateProjectsTable();
         updateSelectedProject();
 
@@ -1471,6 +1659,7 @@ public class ProjectFileAdapterGUI extends Application
         taskDescriptionField.setPromptText(temp.getDescription());
       }
     }
+
 
   }
 
