@@ -118,7 +118,11 @@ public class ProjectFileAdapter
 
     tasks.addTask(task);
 
+    Requirement req = requirements.getRequirementById(requirementId);
+
     requirements.getRequirementById(requirementId).setTasks(tasks);
+
+    req.setHours();
 
     projects.getProjectById(projectId).setRequirements(requirements);
 
@@ -133,6 +137,10 @@ public class ProjectFileAdapter
 
     requirements.getRequirementById(requirementId).setTasks(tasks);
 
+    Requirement req = requirements.getRequirementById(requirementId);
+
+    req.setHours();
+    
     projects.getProjectById(projectId).setRequirements(requirements);
 
     saveProjects(projects);

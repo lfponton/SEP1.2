@@ -173,6 +173,17 @@ public class Requirement implements Serializable
     return areDone;
   }
 
+  // Compare reqs hours to tasks hours
+  public boolean tooManyHours(double oldEstimate, double newEstimate)
+  {
+    double difference = newEstimate - oldEstimate;
+    return getTasks().timeEstimates(difference) > getTimeEstimate();
+  }
+
+  public void setHours()
+  {
+    totalHours = getTasks().totalHours();
+  }
   // toString
   public String toString()
   {
@@ -183,4 +194,10 @@ public class Requirement implements Serializable
         + "\nTeam Member: " + teamMember + "\nTotal Hours: " + totalHours
         + "\nTime Estimate: " + timeEstimate + "\nProject id: " + projectId + "\n";
   }
+
+  public Requirement copy()
+  {
+    return new Requirement(id, status, description, deadline, timeEstimate, totalHours, teamMember);
+  }
 }
+

@@ -24,10 +24,7 @@ public class TaskList implements Serializable
 
   public void addByIndex(int index, Task task)
   {
-    if (index < tasks.size())
-    {
       tasks.add(index, task);
-    }
   }
 
   public void remove(Task task)
@@ -71,6 +68,27 @@ public class TaskList implements Serializable
     }
   }
 
+  // Returns the sum of total hours for a TaskList
+  public double totalHours()
+  {
+    double total = 0;
+    for (Task t : tasks)
+    {
+      total += t.getTotalHours();
+    }
+    return total;
+  }
+
+  // Returns the sum of time estimates for a TaskList
+  public double timeEstimates(double newEstimate)
+  {
+    double total = 0;
+    for (Task t : tasks)
+    {
+      total += t.getTimeEstimate();
+    }
+    return total + newEstimate;
+  }
   // toString
   public String toString()
   {

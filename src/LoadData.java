@@ -38,7 +38,7 @@ public class LoadData
 
     TaskList tasks = new TaskList();
 
-    for (int i = 1; i <= 21; i++)
+    for (int i = 1; i <= 20; i++)
     {
       String id = Integer.toString(i);
       tasks.addTask(new Task(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 5, 0, Date.today(), alina));
