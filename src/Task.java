@@ -54,6 +54,8 @@ public class Task implements Serializable
     return deadline;
   }
 
+  public Employee getTeamMember() {return teamMember;}
+
   // toString
   public String toString()
   {
