@@ -1126,7 +1126,7 @@ public class ProjectFileAdapterGUI extends Application
         }
         if(reqStatusBox.getSelectionModel().getSelectedIndex() == -1)
         {
-          status = "Not Specified";
+          status = "Not Started";
         }
 
         if(reqPriorityBox.getSelectionModel().getSelectedIndex() == -1)
