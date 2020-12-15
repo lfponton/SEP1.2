@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class Task implements Serializable
 {
-  private String id, description, status, requirementId;
+  private String id, description, status;
   private double totalHours, timeEstimate;
   private Date deadline;
   private Employee teamMember;
@@ -60,7 +60,7 @@ public class Task implements Serializable
   public String toString()
   {
     String str = "-----------------------";
-    return str + "\nRequirement id: " + requirementId + "\nTask id: " + id
+    return str + "Task id: " + id
         + "\nStatus: " + status + "\nDescription: "
         + description + "\nDeadline: " + deadline
         + "\nTeam Member: " + teamMember + "\nTotal Hours: " + totalHours

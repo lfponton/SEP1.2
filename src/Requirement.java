@@ -7,7 +7,6 @@ public class Requirement implements Serializable
   private Date deadline;
   private Employee teamMember;
   private TaskList tasks;
-  private String date;
 
   // Constructors
   public Requirement() {}
