@@ -5,7 +5,7 @@ public class LoadData
     // This class is only used to load data into the file.
 
     ProjectFileAdapter pfa = new ProjectFileAdapter(
-        "projects.bin");
+        "projects.bin", "projects.xml");
     EmployeeFileAdapter efa = new EmployeeFileAdapter("employees.bin");
 
     EmployeeList employees = new EmployeeList();

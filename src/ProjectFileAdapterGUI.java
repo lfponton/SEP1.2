@@ -251,7 +251,7 @@ public class ProjectFileAdapterGUI extends Application
   {
     window.setTitle("ColourIT Project Manager");
 
-    adapter = new ProjectFileAdapter("projects.bin");
+    adapter = new ProjectFileAdapter("projects.bin", "projects.xml");
     employeeAdapter = new EmployeeFileAdapter("employees.bin");
     listener = new MyActionListener();
     tabListener = new MyTabListener();
@@ -920,7 +920,6 @@ public class ProjectFileAdapterGUI extends Application
           selectedTaskIdOutput.setText(taskId);
         }
       }
-
     }
   }
 
@@ -1012,6 +1011,7 @@ public class ProjectFileAdapterGUI extends Application
         projectIdField.setText("");
         projectTitleField.setText("");
         projectDescriptionField.setText("");
+        adapter.XMLConverter();
       }
       else if (e.getSource() == projectEditButton)
       {
@@ -1164,6 +1164,7 @@ public class ProjectFileAdapterGUI extends Application
         reqStatusBox.setValue(null);
         reqPriorityBox.setValue(null);
         reqTypeBox.setValue(null);
+        adapter.XMLConverter();
       }
 
       else if (e.getSource() == taskCreateButton)

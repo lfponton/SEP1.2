@@ -10,41 +10,7 @@ public class Requirement implements Serializable
   private String date;
 
   // Constructors
-  /*
-  public Requirement(String projectId, String id, String description, Date deadline)
-  {
-    this.projectId = projectId;
-    this.id = id;
-    this.description = description;
-    this.deadline = deadline;
-    tasks = new TaskList();
-  }
-
-   */
-
-  // TEST CONSTRUCTORS
-
-  public Requirement()
-  {}
-  public Requirement(String id, String status, String description, Date deadline)
-  {
-    this.id = id;
-    this.status = status;
-    this.description = description;
-    this.deadline = deadline;
-    tasks = new TaskList();
-  }
-
-  public Requirement(String id, String status, String description, Date deadline, Employee teamMember)
-  {
-    this.id = id;
-    this.status = status;
-    this.description = description;
-    this.deadline = deadline;
-    this.teamMember = teamMember;
-    tasks = new TaskList();
-  }
-
+  public Requirement() {}
   public Requirement(String id, String status, String description, Date deadline, double timeEstimate, double totalHours, Employee teamMember)
   {
     this.id = id;
@@ -56,20 +22,7 @@ public class Requirement implements Serializable
     this.teamMember = teamMember;
     tasks = new TaskList();
   }
-
-  public Requirement(String id, String status, String description,
-      Date deadline, Employee teamMember, double timeEstimate,
-      double totalHours)
-  {
-    this.id = id;
-    this.status = status;
-    this.description = description;
-    this.deadline = deadline;
-    this.teamMember = teamMember;
-    this.timeEstimate = timeEstimate;
-    this.totalHours = totalHours;
-  }
-
+// Remove this constructor
   public Requirement(String id, String type, String description,
       String priority, String status, double totalHours, double timeEstimate,
       Date deadline, Employee teamMember)
@@ -139,10 +92,6 @@ public class Requirement implements Serializable
 
 
   // Setters
-  public void setDeadline(Date deadline)
-  {
-    this.deadline = deadline;
-  }
   public void setTasks(TaskList tasks)
   {
     this.tasks = tasks;

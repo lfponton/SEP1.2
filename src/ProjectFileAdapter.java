@@ -4,13 +4,17 @@ import java.io.IOException;
 public class ProjectFileAdapter
 {
   private MyFileIO mfio;
-  private String fileName;
+  private String binFileName;
+  private MyTextFileIO mtfio;
+  private String txtFileName;
 
   // Constructor
-  public ProjectFileAdapter(String fileName)
+  public ProjectFileAdapter(String binFileName, String txtFileName)
   {
     mfio = new MyFileIO();
-    this.fileName = fileName;
+    mtfio = new MyTextFileIO();
+    this.binFileName = binFileName;
+    this.txtFileName = txtFileName;
   }
 
   // Use the MyFileIO class to save all Projects in the ProjectList object
@@ -18,7 +22,7 @@ public class ProjectFileAdapter
   {
     try
     {
-      mfio.writeToFile(fileName, projects);
+      mfio.writeToFile(binFileName, projects);
     }
     catch (FileNotFoundException e)
     {
@@ -38,7 +42,7 @@ public class ProjectFileAdapter
 
     try
     {
-      projects = (ProjectList) mfio.readObjectFromFile(fileName);
+      projects = (ProjectList) mfio.readObjectFromFile(binFileName);
     }
     catch (FileNotFoundException e)
     {
@@ -146,39 +150,48 @@ public class ProjectFileAdapter
     saveProjects(projects);
   }
 
-  // Edit and Remove methods below
-  public void editProject(String id, Project editedProject)
+public void XMLConverter()
+{
+  ProjectList projects = getAllProjects();
+  String XMLOutput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<projects>";
+  for (int i = 0; i < projects.size(); i++)
   {
-    ProjectList projects = getAllProjects();
+    Project project = projects.getProject(i);
+    XMLOutput += "<project><title>" + project.getTitle() +
+        "</title><description>" + project.getDescription() + "</description>";
+    String projectId = project.getId();
+    RequirementList requirements = getAllRequirements(projectId);
 
-    for (int i = 0; i < projects.size(); i++)
+    for (int j = 0; j < requirements.size(); j++)
     {
-      Project project = projects.getProject(i);
-
-      if (project.getId().equals(id))
+      Requirement requirement = project.getRequirements().getRequirement(j);
+      if (requirement != null)
       {
-        projects.removeProject(project);
-        projects.addProject(i, editedProject);
-        break;
+        XMLOutput += "<requirement><description>" + requirement
+            .getDescription() + "</description><status>" + requirement
+            .getStatus() + "</status>" + "<deadline>" + requirement
+            .getDeadline() + "</deadline><type>" + requirement.getType()
+            + "</type></requirement>";
+      }
+      else
+      {
+        XMLOutput += "<requirement><description></description>"
+            + "<status></status><deadline></deadline><type></type></requirement>";
       }
     }
-    saveProjects(projects);
+    XMLOutput += "</project>";
   }
+  XMLOutput += "</projects>";
 
-  public void removeProject(String id)
+  try
   {
-    ProjectList projects = getAllProjects();
-
-    for (int i = 0; i < projects.size(); i++)
-    {
-      Project project = projects.getProject(i);
-
-      if (project.getId().equals(id))
-      {
-        projects.removeProject(project);
-        break;
-      }
-    }
-    saveProjects(projects);
+    mtfio.writeToFile(txtFileName, XMLOutput);
   }
+
+  catch (FileNotFoundException e)
+  {
+    System.out.println("File not found");
+  }
+}
 }

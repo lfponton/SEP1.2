@@ -27,11 +27,6 @@ public class TaskList implements Serializable
       tasks.add(index, task);
   }
 
-  public void remove(Task task)
-  {
-    tasks.remove(task);
-  }
-
   public void removeByIndex(int index)
   {
     if (index < tasks.size())
@@ -41,20 +36,6 @@ public class TaskList implements Serializable
   }
 
   // Several get methods
-  public Task getTaskById(String id)
-  {
-    Task task = new Task();
-
-    for (Task t : tasks)
-    {
-      if (t.getId() != null && t.getId().equals(id))
-      {
-        task = t;
-        break;
-      }
-    }
-    return task;
-  }
 
   public Task getTask(int index)
   {
