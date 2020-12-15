@@ -2,21 +2,12 @@ import java.io.Serializable;
 
 public class Task implements Serializable
 {
-  private String id, description, status, requirementId;
+  private String id, description, status;
   private double totalHours, timeEstimate;
   private Date deadline;
   private Employee teamMember;
 
   // Constructors
-  public Task(String requirementId, String id, String description, Date deadline)
-  {
-    this.requirementId = requirementId;
-    this.id = id;
-    this.description = description;
-    this.deadline = deadline;
-  }
-
-  // TEST CONSTRUCTOR
   public Task(String id, String status,
       String description, double timeEstimate, double totalHours, Date deadline,
       Employee teamMember)
@@ -30,17 +21,7 @@ public class Task implements Serializable
     this.teamMember = teamMember;
   }
 
-  public Task(String id, String status, String description)
-  {
-    this.id = id;
-    this.description = description;
-    this.status = status;
-  }
-
-  public Task()
-  {
-
-  }
+  public Task() {}
 
   // Getters
   public String getId()
@@ -58,11 +39,6 @@ public class Task implements Serializable
     return status;
   }
 
-  public String getRequirementId()
-  {
-    return requirementId;
-  }
-
   public double getTotalHours()
   {
     return totalHours;
@@ -78,16 +54,13 @@ public class Task implements Serializable
     return deadline;
   }
 
-  public Employee getTeamMember()
-  {
-    return teamMember;
-  }
+  public Employee getTeamMember() {return teamMember;}
 
   // toString
   public String toString()
   {
     String str = "-----------------------";
-    return str + "\nRequirement id: " + requirementId + "\nTask id: " + id
+    return str + "Task id: " + id
         + "\nStatus: " + status + "\nDescription: "
         + description + "\nDeadline: " + deadline
         + "\nTeam Member: " + teamMember + "\nTotal Hours: " + totalHours

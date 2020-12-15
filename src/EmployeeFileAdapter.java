@@ -46,43 +46,6 @@ public class EmployeeFileAdapter
     saveEmployee(employees);
   }
 
-  /*
-  // Use the MyFileIO class to retrieve a StudentList object with all Students
-  // from the given country
-  public EmployeeList getEmployeeFrom(String fromProjects)
-  {
-    EmployeeList employee = new EmployeeList();
-
-    try
-    {
-      EmployeeList result = (EmployeeList)mfio.readObjectFromFile(fileName);
-
-      for (int i = 0; i < result.size(); i++)
-      {
-        if (result.getEmployee(i).getEmployeeFrom().equals(fromProjects))
-        {
-          employee.add(result.getEmployee(i));
-        }
-      }
-    }
-    catch (FileNotFoundException e)
-    {
-      System.out.println("File not found");
-    }
-    catch (IOException e)
-    {
-      System.out.println("IO Error reading file");
-    }
-    catch (ClassNotFoundException e)
-    {
-      System.out.println("Class Not Found");
-    }
-
-    return employee;
-  }
-
-   */
-
   // Use the MyFileIO class to save all Students in the StudentList object
   public void saveEmployee(EmployeeList employees)
   {
@@ -99,26 +62,4 @@ public class EmployeeFileAdapter
       System.out.println("IO Error writing to file");
     }
   }
-/*
-  // Edit employee with the given firstname and lastname
-  public void editEmployee(String firstName, String lastName, String role)
-  {
-    EmployeeList employee = getAllEmployees();
-
-    for (int i = 0; i < employee.size(); i++)
-    {
-      Employee employees = null;
-      employees = employee.getEmployee(i);
-
-      if (employees.getFirstName().equals(firstName) && employees.getLastName().equals(lastName))
-      {
-        employees.setRole(role);
-      }
-    }
-
-    saveEmployee(employees);
-  }
-
- */
-
 }

@@ -37,39 +37,6 @@ public class EmployeeList implements Serializable
     }
   }
 
-  // Get the Employee object with the given firstName and lastName
-  // if one exists, else return null
-  public Employee get(String firstName, String lastName, String role)
-  {
-    for(int i = 0; i<employees.size(); i++)
-    {
-      Employee temp = (Employee) employees.get(i);
-
-      if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName) && temp.getRole().equals(role))
-      {
-        return temp;
-      }
-    }
-
-    return null;
-  }
-
-  // Return the index of the Employee object with the given
-  // firstName and lastName if one exists, else return -1
-  public int getIndex(String firstName, String lastName, String role)
-  {
-    for(int i = 0; i<employees.size(); i++)
-    {
-      Employee temp = (Employee) employees.get(i);
-
-      if(temp.getFirstName().equals(firstName) && temp.getLastName().equals(lastName) && temp.getRole().equals(role))
-      {
-        return i;
-      }
-    }
-    return -1;
-  }
-
   // Return how many Employee objects are in the list
   public int size()
   {

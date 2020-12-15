@@ -20,6 +20,12 @@ public class RequirementList implements Serializable
   {
     requirements.add(requirement);
   }
+
+  public void add(int currentIndex, Requirement requirement)
+  {
+    requirements.add(currentIndex, requirement);
+  }
+
   public void removeRequirement(Requirement requirement)
   {
     requirements.remove(requirement);
@@ -29,6 +35,7 @@ public class RequirementList implements Serializable
   {
     requirements.remove(index);
   }
+
   // Several get methods
   // Return the Requirement object at index if one exists,
   // else return null
@@ -59,7 +66,7 @@ public class RequirementList implements Serializable
     return requirement;
   }
 
-  // toStrimg
+  // toString
   public String toString()
   {
     String str = "";
@@ -68,10 +75,5 @@ public class RequirementList implements Serializable
      str += r.toString();
     }
     return str;
-  }
-
-  public void add(int currentIndex, Requirement requirement)
-  {
-    requirements.add(currentIndex, requirement);
   }
 }

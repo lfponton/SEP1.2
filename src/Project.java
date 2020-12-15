@@ -13,11 +13,6 @@ public class Project implements Serializable
     this.description = description;
     requirements = new RequirementList();
   }
-  public Project(String id)
-  {
-    this.id = id;
-    requirements = new RequirementList();
-  }
 
   public Project()
   {
@@ -43,18 +38,6 @@ public class Project implements Serializable
   }
 
   // Setters
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-  public void setTitle(String title)
-  {
-    this.title = title;
-  }
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
   public void setRequirements(RequirementList requirements)
   {
     this.requirements = requirements;
