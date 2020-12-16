@@ -28,6 +28,6 @@ public class Employee implements Serializable
 
   public String toString()
   {
-    return lastName + ", " + firstName;
+    return firstName + " " + lastName;
   }
 }
