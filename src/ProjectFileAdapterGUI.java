@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 /**
  * A user interface that allows for displaying and modifying information about projects.
  *
- * @author Luis Fernandez
+ * @author Agostina, Alina and Luis
  * @version 1.0
  */
 
@@ -74,12 +74,10 @@ public class ProjectFileAdapterGUI extends Application
   private FlowPane reqTablePane;
 
   private Label reqIdLabel;
-  private Label reqProjectIdLabel;
   private Label reqDescriptionLabel;
   private Label reqStatusLabel;
   private Label reqTotalHoursLabel;
   private Label reqTimeEstimateLabel;
-  private Label reqDeadlineLabel;
   private Label reqDayLabel;
   private Label reqMonthLabel;
   private Label reqYearLabel;
@@ -102,7 +100,6 @@ public class ProjectFileAdapterGUI extends Application
   private TableColumn<Requirement, String> reqTeamMemberColumn;
 
   private TextField reqIdField;
-  private TextField reqProjectIdField;
   private TextField reqDescriptionField;
   private TextField reqTotalHoursField;
   private TextField reqTimeEstimateField;
@@ -134,13 +131,10 @@ public class ProjectFileAdapterGUI extends Application
   private FlowPane taskTablePane;
 
   private Label taskIdLabel;
-  private Label taskProjectIdLabel;
-  private Label taskReqIdLabel;
   private Label taskDescriptionLabel;
   private Label taskStatusLabel;
   private Label taskTotalHoursLabel;
   private Label taskTimeEstimateLabel;
-  private Label taskDeadlineLabel;
   private Label taskDayLabel;
   private Label taskMonthLabel;
   private Label taskYearLabel;
@@ -159,17 +153,13 @@ public class ProjectFileAdapterGUI extends Application
   private TableColumn<Task, String> taskTeamMemberColumn;
 
   private TextField taskIdField;
-  private TextField taskProjectIdField;
   private TextField taskDescriptionField;
-  private TextField taskReqIdField;
   private TextField taskStatusField;
   private TextField taskTotalHoursField;
   private TextField taskTimeEstimateField;
-  private TextField taskDeadlineField;
   private TextField taskDayField;
   private TextField taskMonthField;
   private TextField taskYearField;
-  private TextField taskTeamMemberField;
 
   private Button taskCreateButton;
   private Button taskEditButton;
@@ -213,17 +203,10 @@ public class ProjectFileAdapterGUI extends Application
 
   private ComboBox<String> rolesStatusBox;
 
-  private Tab editEmployeeTab;
-  private Tab allEmployeeTab;
-  private Tab editAreaMenuItem;
-
-  private TextArea allEmployeeArea;
-
   private Button employeeEditButton;
   private Button employeeCreateButton;
   private Button employeeRemoveButton;
 
-  private ComboBox<Employee> employeeBox;
   private VBox employeePane;
 
   // Menu
@@ -470,8 +453,6 @@ public class ProjectFileAdapterGUI extends Application
     reqTypeBox = new ComboBox<String>(FXCollections
         .observableArrayList(reqType));
 
-
-
     reqInputPane = new GridPane();
     reqInputPane.setHgap(5);
     reqInputPane.setVgap(5);
@@ -691,7 +672,7 @@ public class ProjectFileAdapterGUI extends Application
     lastNameField = new TextField();
     roleField = new TextField();
 
-    // comboBox for roles
+    // ComboBox for roles
 
     String[] roleStatus = {"Project Owner", "Project Creator", "Scrum Master",
         "Team Member"};
@@ -762,7 +743,7 @@ public class ProjectFileAdapterGUI extends Application
   /**
    * Updates the allProjectsTable with information from the projects file
    */
-  public void updateProjectsTable()
+  private void updateProjectsTable()
   {
     int currentIndex = allProjectsTable.getSelectionModel().getSelectedIndex();
 
@@ -784,7 +765,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateReqTable()
+  private void updateReqTable()
   {
     int currentIndex = allReqsTable.getSelectionModel().getSelectedIndex();
 
@@ -812,10 +793,9 @@ public class ProjectFileAdapterGUI extends Application
         allReqsTable.getSelectionModel().select(currentIndex);
       }
     }
-
   }
 
-  public void updateTaskTable()
+  private void updateTaskTable()
   {
     int currentIndex = allTasksTable.getSelectionModel().getSelectedIndex();
 
@@ -850,7 +830,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateEmployeeTable()
+  private void updateEmployeeTable()
   {
     int currentIndex = allEmployeeTable.getSelectionModel().getSelectedIndex();
 
@@ -872,7 +852,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateSelectedProject()
+  private void updateSelectedProject()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
     {
@@ -882,7 +862,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateSelectedReq()
+  private void updateSelectedReq()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
     {
@@ -899,7 +879,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateSelectedTask()
+  private void updateSelectedTask()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
     {
@@ -923,7 +903,7 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateTaskTMBox()
+  private void updateTaskTMBox()
   {
     int currentIndex = taskTMBox.getSelectionModel().getSelectedIndex();
 
@@ -945,10 +925,8 @@ public class ProjectFileAdapterGUI extends Application
     }
   }
 
-  public void updateReqTMBox()
+  private void updateReqTMBox()
   {
-    int currentIndex = reqTMBox.getSelectionModel().getSelectedIndex();
-
     reqTMBox.getItems().clear();
 
     EmployeeList employees = employeeAdapter.getAllEmployees();
@@ -956,12 +934,11 @@ public class ProjectFileAdapterGUI extends Application
     {
       reqTMBox.getItems().add(employees.getEmployee(i));
     }
-
   }
 
   /*
    * Inner action listener class
-   * @author Luis Fernandez
+   * @author Agostina, Alina and Luis Fernandez
    * @version 1.0
    */
   private class MyActionListener implements EventHandler<ActionEvent>
@@ -1636,7 +1613,7 @@ public class ProjectFileAdapterGUI extends Application
 
   /*
    * Inner change listener class
-   * @author Luis Fernandez
+   * @author Agostina, Alina and Luis
    * @version 1.0
    */
   private class MyTabListener implements ChangeListener<Tab>
@@ -1720,8 +1697,6 @@ public class ProjectFileAdapterGUI extends Application
         taskDescriptionField.setPromptText(temp.getDescription());
       }
     }
-
   }
-
 }
 
