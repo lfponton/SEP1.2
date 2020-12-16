@@ -1728,11 +1728,6 @@ public class ProjectFileAdapterGUI extends Application
       if (temp != null)
       {
         updateSelectedProject();
-
-        projectIdField.setText(temp.getId());
-        projectTitleField.setText(temp.getTitle());
-        projectDescriptionField.setPromptText(temp.getDescription());
-
       }
     }
   }
@@ -1761,9 +1756,6 @@ public class ProjectFileAdapterGUI extends Application
       if (temp != null)
       {
         updateSelectedTask();
-        taskIdField.setText(temp.getId());
-        taskStatusField.setText(temp.getStatus());
-        taskDescriptionField.setPromptText(temp.getDescription());
       }
     }
   }
