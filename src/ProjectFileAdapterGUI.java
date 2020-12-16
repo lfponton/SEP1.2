@@ -34,14 +34,34 @@ public class ProjectFileAdapterGUI extends Application
 
   private TabPane tabPane;
 
+  //Images
+  private Image logo;
+  private ImageView logoView;
+  private FlowPane imagePane;
+
+  private Image reqLogo;
+  private ImageView reqLogoView;
+  private FlowPane reqImagePane;
+
+  private Image taskLogo;
+  private ImageView taskLogoView;
+  private FlowPane taskImagePane;
+
+  private Image employeeLogo;
+  private ImageView employeeLogoView;
+  private FlowPane employeeImagePane;
+
+  private Image small;
+
+
+
   // Projects Tab
   private Tab projectTab;
   private VBox projectPane;
   private HBox projectTopPane;
   private FlowPane projectTablePane;
-  private FlowPane imagePane;
-  private Image logo;
-  private ImageView logoView;
+  private HBox projectButtonPane;
+
 
   private Label projectIdLabel;
   private Label projectTitleLabel;
@@ -129,6 +149,7 @@ public class ProjectFileAdapterGUI extends Application
   private VBox taskPane;
   private HBox taskTopPane;
   private FlowPane taskTablePane;
+  private HBox taskButtonPane;
 
   private Label taskIdLabel;
   private Label taskDescriptionLabel;
@@ -184,6 +205,7 @@ public class ProjectFileAdapterGUI extends Application
 
   private HBox employeeTopPane;
   private FlowPane employeeTablePane;
+  private HBox employeeButtonPane;
 
   private Label firstNameLabel;
   private Label lastNameLabel;
@@ -208,6 +230,7 @@ public class ProjectFileAdapterGUI extends Application
   private Button employeeRemoveButton;
 
   private VBox employeePane;
+  private HBox employeeButonPane;
 
   // Menu
   private MenuBar menuBar;
@@ -257,6 +280,7 @@ public class ProjectFileAdapterGUI extends Application
     projectPane.setPadding(new Insets(10));
 
     projectTopPane = new HBox(20);
+    projectTopPane.setAlignment(Pos.BASELINE_CENTER);
 
     allProjectsTable = new TableView<Project>();
     projectsDefaultSelectionModel = allProjectsTable.getSelectionModel();
@@ -314,6 +338,12 @@ public class ProjectFileAdapterGUI extends Application
     imagePane.setAlignment(Pos.BOTTOM_CENTER);
     imagePane.getChildren().add(logoView);
 
+    projectButtonPane = new HBox(20);
+    projectButtonPane.setAlignment(Pos.BASELINE_CENTER);
+    projectButtonPane.getChildren().add(projectCreateButton);
+    projectButtonPane.getChildren().add(projectEditButton);
+    projectButtonPane.getChildren().add(projectRemoveButton);
+
     selectedProjectPane = new HBox(20);
     selectedProjectIdLabel = new Label("Selected Project:");
     selectedProjectIdOutput = new Label();
@@ -322,9 +352,8 @@ public class ProjectFileAdapterGUI extends Application
 
     projectPane.getChildren().add(selectedProjectPane);
     projectPane.getChildren().add(projectTopPane);
-    projectPane.getChildren().add(projectCreateButton);
-    projectPane.getChildren().add(projectEditButton);
-    projectPane.getChildren().add(projectRemoveButton);
+    projectPane.getChildren().add(projectButtonPane);
+
 
     projectPane.getChildren().add(imagePane);
     projectTab = new Tab("Projects");
@@ -338,10 +367,15 @@ public class ProjectFileAdapterGUI extends Application
     reqRemoveButton = new Button("Remove");
     reqRemoveButton.setOnAction(listener);
 
+
+
     reqPane = new VBox(20);
     reqPane.setPadding(new Insets(10));
     reqButtomPane = new HBox(20);
+    reqButtomPane.setAlignment(Pos.BASELINE_CENTER);
     reqTopPane = new HBox(20);
+    reqTopPane.setAlignment(Pos.TOP_CENTER);
+
 
     allReqsTable = new TableView<Requirement>();
     reqDefaultSelectionModel = allReqsTable.getSelectionModel();
@@ -468,8 +502,16 @@ public class ProjectFileAdapterGUI extends Application
     reqInputPane.addRow(9, reqTotalHoursLabel, reqTotalHoursField);
     reqInputPane.addRow(10, reqTMLabel, reqTMBox);
 
+    reqLogo = new Image("file:img/logo.png");
+    reqLogoView = new ImageView(reqLogo);
+    reqImagePane = new FlowPane();
+    reqImagePane.setPrefHeight(200);
+    reqImagePane.setAlignment(Pos.BOTTOM_CENTER);
+    reqImagePane.getChildren().add(reqLogoView);
+
     reqTopPane.getChildren().add(reqInputPane);
     reqTopPane.getChildren().add(allReqsTable);
+
 
     selectedReqPane = new HBox(20);
     selectedReqProjectIdLabel = new Label("Selected Project:");
@@ -483,7 +525,12 @@ public class ProjectFileAdapterGUI extends Application
         .addAll(reqCreateButton, reqEditButton, reqRemoveButton);
     reqPane.getChildren().add(selectedReqPane);
     reqPane.getChildren().add(reqTopPane);
+
     reqPane.getChildren().add(reqButtomPane);
+    reqPane.getChildren().add(reqLogoView);
+    reqPane.setAlignment(Pos.BASELINE_CENTER);
+
+
 
     reqTab = new Tab("Requirements");
     reqTab.setContent(reqPane);
@@ -502,7 +549,9 @@ public class ProjectFileAdapterGUI extends Application
     taskPane = new VBox(20);
     taskPane.setPadding(new Insets(10));
 
+
     taskTopPane = new HBox(20);
+    taskTopPane.setAlignment(Pos.BASELINE_CENTER);
 
     allTasksTable = new TableView<Task>();
     taskDefaultSelectionModel = allTasksTable.getSelectionModel();
@@ -596,8 +645,16 @@ public class ProjectFileAdapterGUI extends Application
     taskInputPane.addRow(7, taskTotalHoursLabel, taskTotalHoursField);
     taskInputPane.addRow(8, taskTeamMemberLabel, taskTMBox);
 
+    taskLogo = new Image("file:img/logo.png");
+    taskLogoView = new ImageView(taskLogo);
+    taskImagePane = new FlowPane();
+    taskImagePane.setPrefHeight(200);
+    taskImagePane.setAlignment(Pos.BOTTOM_CENTER);
+    taskImagePane.getChildren().add(taskLogoView);
+
     taskTopPane.getChildren().add(taskInputPane);
     taskTopPane.getChildren().add(allTasksTable);
+
 
     selectedTaskPane = new HBox(20);
     selectedTaskProjectIdLabel = new Label("Selected Project:");
@@ -611,11 +668,16 @@ public class ProjectFileAdapterGUI extends Application
             selectedTaskReqIdLabel, selectedTaskReqIdOutput,
             selectedTaskIdLabel, selectedTaskIdOutput);
 
+    taskButtonPane = new HBox(20);
+    taskButtonPane.setAlignment(Pos.BASELINE_CENTER);
+    taskButtonPane.getChildren().add(taskCreateButton);
+    taskButtonPane.getChildren().add(taskEditButton);
+    taskButtonPane.getChildren().add(taskRemoveButton);
+
     taskPane.getChildren().add(selectedTaskPane);
     taskPane.getChildren().add(taskTopPane);
-    taskPane.getChildren().add(taskCreateButton);
-    taskPane.getChildren().add(taskEditButton);
-    taskPane.getChildren().add(taskRemoveButton);
+    taskPane.getChildren().add(taskButtonPane);
+    taskPane.getChildren().add(taskImagePane);
 
     taskTab = new Tab("Task");
     taskTab.setContent(taskPane);
@@ -634,7 +696,9 @@ public class ProjectFileAdapterGUI extends Application
     employeePane = new VBox(20);
     employeePane.setPadding(new Insets(10));
 
+
     employeeTopPane = new HBox(20);
+    employeeTopPane.setAlignment(Pos.BASELINE_CENTER);
 
     allEmployeeTable = new TableView<Employee>();
     employeeDefaultSelectionModel = allEmployeeTable.getSelectionModel();
@@ -686,13 +750,27 @@ public class ProjectFileAdapterGUI extends Application
     employeeInputPane.addRow(1, lastNameLabel, lastNameField);
     employeeInputPane.addRow(2, roleLabel, rolesStatusBox);
 
+    employeeLogo = new Image("file:img/logo.png");
+    employeeLogoView = new ImageView(employeeLogo);
+    employeeImagePane = new FlowPane();
+    employeeImagePane.setPrefHeight(200);
+    employeeImagePane.setAlignment(Pos.BOTTOM_CENTER);
+    employeeImagePane.getChildren().add(employeeLogoView);
+
     employeeTopPane.getChildren().add(employeeInputPane);
     employeeTopPane.getChildren().add(allEmployeeTable);
 
+    employeeButtonPane = new HBox(20);
+    employeeButtonPane.getChildren().add(employeeCreateButton);
+    employeeButtonPane.getChildren().add(employeeEditButton);
+    employeeButtonPane.getChildren().add(employeeRemoveButton);
+    employeeButtonPane.setAlignment(Pos.BASELINE_CENTER);
+
+
     employeePane.getChildren().add(employeeTopPane);
-    employeePane.getChildren().add(employeeCreateButton);
-    employeePane.getChildren().add(employeeEditButton);
-    employeePane.getChildren().add(employeeRemoveButton);
+    employeePane.getChildren().add(employeeButtonPane);
+    employeePane.getChildren().add(employeeImagePane);
+
 
     employeeTab = new Tab("Employees");
     employeeTab.setContent(employeePane);
@@ -733,10 +811,13 @@ public class ProjectFileAdapterGUI extends Application
     mainPane.getChildren().add(menuBar);
     mainPane.getChildren().add(tabPane);
 
-    Scene scene = new Scene(mainPane, 1200, 600);
+    Scene scene = new Scene(mainPane, 1400, 600);
+    scene.getStylesheets().add("MyCss1.css");
 
+    small = new Image("file:img/logo-small.png");
     window.setScene(scene);
-    window.setResizable(false);
+    window.setResizable(true);
+    window.getIcons().add(small);
     window.show();
   }
 
@@ -1676,8 +1757,6 @@ public class ProjectFileAdapterGUI extends Application
       if (temp != null)
       {
         updateSelectedReq();
-        reqIdField.setText(temp.getId());
-        reqDescriptionField.setText(temp.getDescription());
       }
     }
   }
