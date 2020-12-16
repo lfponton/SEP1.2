@@ -4,13 +4,13 @@
 .text-field{
     -fx-border-color:#E6E6E6;
     -fx-border-style:solid;
-    -fx-border-width:1;
+    -fx-border-width:1px;
 }
 
 .combo-box{
-    -fx-border-color:#E6E6E6;
+    -fx-border-color:white;
     -fx-border-style:solid;
-    -fx-border-width:1;
+    -fx-border-width:1px;
 }
 .combo-box .arrow{
     -fx-background-color: #0074E0;
@@ -37,7 +37,7 @@
     -fx-text-decoration:black;
 }
 .button {
-  -fx-background-color: white; 
+  -fx-background-color: linear-gradient(to bottom, white, #C3D6EA);     
 }
 
 .button:hover {
@@ -47,7 +47,6 @@
 
 .tab-pane {
     -fx-border-color: #0074E0;
-    -fx-border-radius: 5 5 0 0;
     -fx-background-color: white;
    
 }
@@ -66,7 +65,7 @@
     -fx-background-color: transparent;
 }.table-view .table-cell{
     -fx-border-color: transparent;
-    -fx-padding: 2 0 2 10px;
+    -fx-padding: 2px 0 2px 10px;
 }
 
 .table-row-cell: hover {
@@ -77,12 +76,10 @@
 
 .table-row-cell: odd{
     -fx-background-color:  #C3D6EA;
-    -fx-padding: 0.0em;
 }
 
 .table-row-cell: even{
     -fx-background-color: white;
-    -fx-padding: 0.0em;
 }
 
 .table-view .virtual-flow .scroll-bar:vertical,
