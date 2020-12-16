@@ -1322,6 +1322,14 @@ public class ProjectFileAdapterGUI extends Application
             taskIdField.setText("");
             taskStatusField.setText("");
             taskDescriptionField.setText("");
+            taskDayField.setText("");
+            taskMonthField.setText("");
+            taskYearField.setText("");
+            taskTotalHoursField.setText("");
+            taskTimeEstimateField.setText("");
+            taskTMBox.setValue(null);
+            taskStatusBox.setValue(null);
+
           }
         }
       }
@@ -1375,6 +1383,10 @@ public class ProjectFileAdapterGUI extends Application
             {
               String id = taskIdField.getText();
               String status = taskStatusBox.getValue();
+              if(taskStatusBox.getSelectionModel().getSelectedIndex() == -1)
+              {
+                status = tasks.getTask(currentIndex).getStatus();
+              }
               String description = taskDescriptionField.getText();
               int day;
               if (!taskDayField.getText().equals(""))
@@ -1420,6 +1432,10 @@ public class ProjectFileAdapterGUI extends Application
               }
 
               Employee teamMember = taskTMBox.getValue();
+              if(taskTMBox.getSelectionModel().getSelectedIndex() == -1)
+              {
+                teamMember = tasks.getTask(currentIndex).getTeamMember();
+              }
 
               if (id.equals(""))
               {
@@ -1441,12 +1457,15 @@ public class ProjectFileAdapterGUI extends Application
               updateReqTable();
               updateTaskTable();
               taskIdField.setText("");
+              taskStatusField.setText("");
               taskDescriptionField.setText("");
               taskDayField.setText("");
               taskMonthField.setText("");
               taskYearField.setText("");
-              taskTimeEstimateField.setText("");
               taskTotalHoursField.setText("");
+              taskTimeEstimateField.setText("");
+              taskTMBox.setValue(null);
+              taskStatusBox.setValue(null);
             }
           }
         }
