@@ -203,6 +203,7 @@ public class ProjectFileAdapterGUI extends Application
 
   private Tab employeeTab;
 
+  private HBox topPadding;
   private HBox employeeTopPane;
   private FlowPane employeeTablePane;
   private HBox employeeButtonPane;
@@ -696,9 +697,9 @@ public class ProjectFileAdapterGUI extends Application
     employeePane = new VBox(20);
     employeePane.setPadding(new Insets(10));
 
-
     employeeTopPane = new HBox(20);
     employeeTopPane.setAlignment(Pos.BASELINE_CENTER);
+    employeeTopPane.setPadding(new Insets(40));
 
     allEmployeeTable = new TableView<Employee>();
     employeeDefaultSelectionModel = allEmployeeTable.getSelectionModel();
