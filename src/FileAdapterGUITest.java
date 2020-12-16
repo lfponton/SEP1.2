@@ -1,9 +1,9 @@
 import javafx.application.Application;
 
-public class ProjectFileAdapterGUITest
+public class FileAdapterGUITest
 {
   public static void main(String[] args)
   {
-    Application.launch(ProjectFileAdapterGUI.class);
+    Application.launch(FileAdapterGUI.class);
   }
 }

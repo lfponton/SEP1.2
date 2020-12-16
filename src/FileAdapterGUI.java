@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 
-public class ProjectFileAdapterGUI extends Application
+public class FileAdapterGUI extends Application
 {
   private ProjectFileAdapter adapter;
 
