@@ -16,16 +16,34 @@
     -fx-background-color: #0074E0;
 }
 .combo-box .arrow-button{
-    -fx-background-color:white;
+    -fx-background-color:black;
     -fx-border-style:none;
 }
 .combo-box .arrow-button{
     -fx-background-color:white;
+
 }
 .combo-box .list-cell{
     -fx-background-color:white;
+    -fx-text-decoration:black;
 }
 
+.combo-box .list-cell:hover {
+    -fx-background-color:#C3D6EA;
+    -fx-text-decoration:black;
+}
+
+.combo-box .list-cell:checked {
+    -fx-text-decoration:black;
+}
+.button {
+  -fx-background-color: white; 
+}
+
+.button:hover {
+  -fx-background-color: #0074E0;
+  -fx-text-decoration-color: white;
+}
 
 .tab-pane {
     -fx-border-color: #0074E0;
