@@ -987,23 +987,12 @@ public class ProjectFileAdapterGUI extends Application
 
   private void updateTaskTMBox()
   {
-    int currentIndex = taskTMBox.getSelectionModel().getSelectedIndex();
-
     taskTMBox.getItems().clear();
 
     EmployeeList employees = employeeAdapter.getAllEmployees();
     for (int i = 0; i < employees.size(); i++)
     {
       taskTMBox.getItems().add(employees.getEmployee(i));
-    }
-
-    if (currentIndex == -1 && taskTMBox.getItems().size() > 0)
-    {
-      taskTMBox.getSelectionModel().select(0);
-    }
-    else
-    {
-      taskTMBox.getSelectionModel().select(currentIndex);
     }
   }
 
