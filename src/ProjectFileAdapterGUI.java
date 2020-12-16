@@ -1258,6 +1258,10 @@ public class ProjectFileAdapterGUI extends Application
           {
             String id = taskIdField.getText();
             String status = taskStatusBox.getValue();
+            if(taskStatusBox.getSelectionModel().getSelectedIndex() == -1)
+            {
+              status = "Not Started";
+            }
             String description = taskDescriptionField.getText();
             int day;
             if (!taskDayField.getText().equals(""))
@@ -1298,6 +1302,10 @@ public class ProjectFileAdapterGUI extends Application
               totalHours = Double.parseDouble(taskTotalHoursField.getText());
             }
             Employee teamMember = taskTMBox.getValue();
+            if(taskTMBox.getSelectionModel().getSelectedIndex() == -1)
+            {
+              teamMember = new Employee("None","","");
+            }
 
             if (description.equals(""))
             {
