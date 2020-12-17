@@ -822,9 +822,7 @@ public class FileAdapterGUI extends Application
     window.show();
   }
 
-  /**
-   * Updates the allProjectsTable with information from the projects file
-   */
+  // Updates the allProjectsTable with information from the projects file
   private void updateProjectsTable()
   {
     int currentIndex = allProjectsTable.getSelectionModel().getSelectedIndex();
@@ -847,6 +845,7 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the allReqsTable with information from the projects file
   private void updateReqTable()
   {
     int currentIndex = allReqsTable.getSelectionModel().getSelectedIndex();
@@ -877,6 +876,7 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the allTasksTable with information from the projects file
   private void updateTaskTable()
   {
     int currentIndex = allTasksTable.getSelectionModel().getSelectedIndex();
@@ -912,6 +912,7 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the allEmployeeTable with information from the employees file
   private void updateEmployeeTable()
   {
     int currentIndex = allEmployeeTable.getSelectionModel().getSelectedIndex();
@@ -934,6 +935,7 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the selectedProjectIdOutput with information from the project id selected
   private void updateSelectedProject()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
@@ -944,6 +946,8 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the selectedReqProjectIdOutput and selectedReqIdOutput with information
+  // from the project id and requirement id selected
   private void updateSelectedReq()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
@@ -961,6 +965,9 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the selectedTaskProjectIdOutput, selectedTaskReqIdOutput and
+  // selectedTaskIdOutput with information from the project id, requirement id
+  // and task id selected
   private void updateSelectedTask()
   {
     if (allProjectsTable.getSelectionModel().getSelectedItem() != null)
@@ -985,6 +992,8 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the Team Member ComboBox in the Task Tab with information from the
+  // employees file
   private void updateTaskTMBox()
   {
     taskTMBox.getItems().clear();
@@ -996,6 +1005,8 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  // Updates the Team Member ComboBox in the Requirement Tab with information from the
+  // employees file
   private void updateReqTMBox()
   {
     reqTMBox.getItems().clear();
@@ -1745,6 +1756,11 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  /*
+   * Inner change listener class
+   * @author Agostina, Alina and Luis
+   * @version 1.0
+   */
   private class MyProjectListListener implements ChangeListener<Project>
   {
     public void changed(ObservableValue<? extends Project> project,
@@ -1759,6 +1775,11 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  /*
+   * Inner change listener class
+   * @author Agostina, Alina and Luis
+   * @version 1.0
+   */
   private class MyReqListListener implements ChangeListener<Requirement>
   {
     public void changed(ObservableValue<? extends Requirement> requirement,
@@ -1773,6 +1794,11 @@ public class FileAdapterGUI extends Application
     }
   }
 
+  /*
+   * Inner change listener class
+   * @author Agostina, Alina and Luis
+   * @version 1.0
+   */
   private class MyTaskListListener implements ChangeListener<Task>
   {
     public void changed(ObservableValue<? extends Task> task, Task oldTask,

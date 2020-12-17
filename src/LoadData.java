@@ -1,3 +1,9 @@
+/**
+ * A program used for importing data to the projects file and employees file.
+ * @author Agostina, Alina, Luis
+ * @version 1.0
+ */
+
 public class LoadData
 {
   public static void main(String[] args)
