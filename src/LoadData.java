@@ -60,7 +60,7 @@ public class LoadData
     for (int i = 1; i <= 31; i++)
     {
       String id = Integer.toString(i);
-      reqs1.addRequirement(new Requirement(id, "Not Started", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",  Date.today(),100, 0, luis));
+      reqs1.addRequirement(new Requirement(id, "Functional", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Critical", "No Started",  100, 0, Date.today(),luis));
     }
 
     TaskList tasks1 = new TaskList();

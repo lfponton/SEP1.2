@@ -203,7 +203,6 @@ public class FileAdapterGUI extends Application
 
   private Tab employeeTab;
 
-  private HBox topPadding;
   private HBox employeeTopPane;
   private FlowPane employeeTablePane;
   private HBox employeeButtonPane;
@@ -222,7 +221,6 @@ public class FileAdapterGUI extends Application
 
   private TextField firstNameField;
   private TextField lastNameField;
-  private TextField roleField;
 
   private ComboBox<String> rolesStatusBox;
 
@@ -231,7 +229,6 @@ public class FileAdapterGUI extends Application
   private Button employeeRemoveButton;
 
   private VBox employeePane;
-  private HBox employeeButonPane;
 
   // Menu
   private MenuBar menuBar;
@@ -735,7 +732,6 @@ public class FileAdapterGUI extends Application
 
     firstNameField = new TextField();
     lastNameField = new TextField();
-    roleField = new TextField();
 
     // ComboBox for roles
 
@@ -1254,8 +1250,9 @@ public class FileAdapterGUI extends Application
             {
               timeEstimate = currentEstimate;
               Alert alert = new Alert(AlertType.ERROR,
-                  "The total amount of estimate hours for the tasks are greater than the "
-                      + "total estimate hours for the requirement.",
+                  "The total amount of estimated hours for the tasks are "
+                      + "greater than the total estimated hours for the "
+                      + "requirement.",
                   ButtonType.CLOSE);
               alert.setTitle("Error");
               alert.setHeaderText(null);
@@ -1264,7 +1261,6 @@ public class FileAdapterGUI extends Application
               wrongEstimates = true;
             }
           }
-
           if (!wrongEstimates)
           {
             String id = taskIdField.getText();
@@ -1320,7 +1316,7 @@ public class FileAdapterGUI extends Application
 
             if (description.equals(""))
             {
-              description = "?";
+              description = "None";
             }
 
             Date date = new Date(day, month, year);
@@ -1375,17 +1371,16 @@ public class FileAdapterGUI extends Application
                   .parseDouble(taskTimeEstimateField.getText());
 
               if (reqs.getRequirementById(reqId)
-                  .tooManyHours(currentEstimate, timeEstimate)
-                  && timeEstimate > currentEstimate)
+                  .tooManyHours(currentEstimate, timeEstimate))
               {
                 timeEstimate = currentEstimate;
                 Alert alert = new Alert(AlertType.ERROR,
-                    "The total amount of estimate hours for the tasks are greater than the "
-                        + "total estimate hours for the requirement.",
+                    "The total amount of estimated hours for the tasks are "
+                        + "greater than the total estimated hours for the "
+                        + "requirement.",
                     ButtonType.CLOSE);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-
                 alert.showAndWait();
                 wrongEstimates = true;
               }
@@ -1427,7 +1422,6 @@ public class FileAdapterGUI extends Application
               else
               {
                 year = tasks.getTask(currentIndex).getDeadline().getYear();
-                ;
               }
 
               double totalHours;
@@ -1513,15 +1507,15 @@ public class FileAdapterGUI extends Application
 
         if (firstName.equals(""))
         {
-          firstName = "?";
+          firstName = "None";
         }
         if (lastName.equals(""))
         {
-          lastName = "?";
+          lastName = "None";
         }
         if (role == null)
         {
-          role = "?";
+          role = "None";
         }
 
         Employee employee = new Employee(firstName, lastName, role);
@@ -1697,7 +1691,7 @@ public class FileAdapterGUI extends Application
 
         int currentIndex = allReqsTable.getSelectionModel().getSelectedIndex();
 
-        ProjectList projects = adapter.getAllProjects();
+
 
         RequirementList reqList = adapter.getAllRequirements(projectId);
 
