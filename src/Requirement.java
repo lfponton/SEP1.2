@@ -29,19 +29,9 @@ public class Requirement implements Serializable
    * @param timeEstimate the requirement's timeEstimate
    * @param totalHours the requirement's totalHours
    * @param teamMember the requirement's teamMember
+   * @param type the type of requirement
+   * @param priority the priority of the requirement
    */
-  public Requirement(String id, String status, String description, Date deadline, double timeEstimate, double totalHours, Employee teamMember)
-  {
-    this.id = id;
-    this.status = status;
-    this.description = description;
-    this.deadline = deadline;
-    this.timeEstimate = timeEstimate;
-    this.totalHours = totalHours;
-    this.teamMember = teamMember;
-    tasks = new TaskList();
-  }
-// Remove this constructor
   public Requirement(String id, String type, String description,
       String priority, String status, double totalHours, double timeEstimate,
       Date deadline, Employee teamMember)
@@ -156,33 +146,6 @@ public class Requirement implements Serializable
   public void setTasks(TaskList tasks)
   {
     this.tasks = tasks;
-  }
-
-
-  // Check if all tasks are done
-  public boolean tasksDone()
-  {
-    TaskList tasks = getTasks();
-    int size = tasks.size();
-    int count = 0;
-    boolean areDone = false;
-
-    if (size != 0)
-    {
-      for (int i = 0; i <= size; i++)
-      {
-        if (tasks.getTask(i) != null && tasks.getTask(i).getStatus()
-            .equals("Ended"))
-        {
-          count++;
-        }
-      }
-      if (size == count)
-      {
-        areDone = true;
-      }
-    }
-    return areDone;
   }
 
   /**

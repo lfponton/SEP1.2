@@ -1,5 +1,5 @@
 /**
- * A program used for importing data to the projects file and employees file.
+ * A test program used for importing dummy data to the projects file and employees file.
  * @author Agostina, Alina, Luis
  * @version 1.0
  */
@@ -8,7 +8,7 @@ public class LoadData
 {
   public static void main(String[] args)
   {
-    // This class is only used to load data into the file.
+    // This class is only used to load dummy data into the file in order to test the system.
 
     ProjectFileAdapter pfa = new ProjectFileAdapter(
         "projects.bin", "projects.xml");
